@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Portfolio WPL Color Palette */
+  --color-portfolio-primary: #80674C;        /* Donkerbruine accent */
+  --color-portfolio-secondary: #D9B99B;      /* Warme tan */
+  --color-portfolio-light: #FAF0E6;          /* Licht beige background */
+  --color-portfolio-light-alt: #FFF0DB;      /* Licht crème */
+  --color-portfolio-medium: #EED9C4;         /* Zachte beige */
+  --color-portfolio-dark: #252525;           /* Donkergrijs/zwart voor tekst */
+  
+  /* Override Tailwind colors with our palette */
+  --background: #FAF0E6;
+  --foreground: #252525;
+  --card: #FFF0DB;
+  --card-foreground: #252525;
+  --popover: #FFF0DB;
+  --popover-foreground: #252525;
+  --primary: #80674C;
+  --primary-foreground: #FAF0E6;
+  --secondary: #D9B99B;
+  --secondary-foreground: #252525;
+  --muted: #EED9C4;
+  --muted-foreground: #252525;
+  --accent: #80674C;
+  --accent-foreground: #FAF0E6;
+  --destructive: #dc2626;
+  --destructive-foreground: #fef2f2;
+  --border: #EED9C4;
+  --input: #FFF0DB;
+  --ring: #80674C;
+  --radius: 0.5rem;
+  
+  /* Typography */
+  --font-primary: 'Poppins', sans-serif;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+  body {
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-portfolio-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-portfolio-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-portfolio-secondary);
+}
+
+/* Portfolio specific styles */
+.portfolio-section {
+  padding: 5rem 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+  color: var(--color-portfolio-dark);
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(45deg, var(--color-portfolio-primary), var(--color-portfolio-secondary));
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-portfolio-primary);
+  font-weight: 500;
+  margin-bottom: 3rem;
+}
+
+/* Hero section specific */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--color-portfolio-light) 0%, var(--color-portfolio-light-alt) 100%);
+}
+
+.hero-text-primary {
+  color: var(--color-portfolio-primary);
+}
+
+.hero-text-secondary {
+  color: var(--color-portfolio-secondary);
+}
+
+/* Social links */
+.social-link {
+  width: 45px;
+  height: 45px;
+  background: var(--color-portfolio-medium);
+  color: var(--color-portfolio-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.social-link:hover {
+  background: var(--color-portfolio-primary);
+  color: var(--color-portfolio-light);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(128, 103, 76, 0.3);
+}
+
+/* Cards */
+.portfolio-card {
+  background: var(--color-portfolio-light-alt);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(128, 103, 76, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(128, 103, 76, 0.2);
+  border-color: var(--color-portfolio-secondary);
+}
+
+/* Timeline */
+.timeline-item {
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 3rem;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -8px;
+  top: 0;
+  width: 15px;
+  height: 15px;
+  background: var(--color-portfolio-primary);
+  border: 3px solid var(--color-portfolio-light);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--color-portfolio-secondary);
+}
+
+.timeline-content {
+  background: var(--color-portfolio-light);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(128, 103, 76, 0.1);
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateX(10px);
+  box-shadow: 0 10px 25px rgba(128, 103, 76, 0.2);
+}
+
+.timeline-date {
+  color: var(--color-portfolio-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .portfolio-section {
+    padding: 3rem 0;
+  }
+  
+  .timeline-item {
+    padding-left: 2rem;
+  }
+  
+  .timeline-marker {
+    left: -6px;
+  }
+}
