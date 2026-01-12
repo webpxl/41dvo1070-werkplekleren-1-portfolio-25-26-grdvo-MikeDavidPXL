@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiveM Money Washing Tracker</title>
+
+
+
+    <style>
+        :root {
+            /* === CONFIG: pas alleen deze twee aan === */
+            --server-fee: 0.15;
+            /* 20% server */
+            --your-cut: 0.10;
+            /* 5% jij */
+
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #8a2be2, #00f5ff, #8a2be2);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 4s ease-in-out infinite;
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes gradientFlow {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .header p {
+            color: #888888;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Zet decoratieve borders/overlays niet-klikbaar */
+        .card::before,
+        .player-card::before,
+        .money-item::before,
+        .stat-card::before {
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Zorg dat content erboven ligt (optioneel, extra veilig) */
+        .card,
+        .player-card,
+        .money-item,
+        .stat-card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: #00f5ff;
+            border-radius: 16px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            background: #00d4ff;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00f5ff;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            color: #00f5ff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: #00f5ff;
+            border-radius: 20px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover::before {
+            background: #00d4ff;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00f5ff;
+            margin-bottom: 32px;
+            letter-spacing: -0.01em;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #cccccc;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+        }
+
+        input::placeholder {
+            color: #666666;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        button {
+            background: linear-gradient(135deg, #00f5ff 0%, #00d4ff 100%);
+            color: #000000;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-right: 12px;
+            margin-bottom: 12px;
+            letter-spacing: 0.01em;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 245, 255, 0.3);
+            background: linear-gradient(135deg, #33f7ff 0%, #00f5ff 100%);
+        }
+
+        button:active {
+            transform: translateY(0px);
+        }
+
+        .remove-btn {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+            color: #ffffff;
+        }
+
+        .remove-btn:hover {
+            background: linear-gradient(135deg, #ff6b7a 0%, #ff4757 100%);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+            color: #ffffff;
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, #ff6b7a 0%, #ff4757 100%);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #2ed573 0%, #26c45c 100%);
+            color: #ffffff;
+        }
+
+        .export-btn:hover {
+            background: linear-gradient(135deg, #3fd97f 0%, #2ed573 100%);
+            box-shadow: 0 8px 25px rgba(46, 213, 115, 0.3);
+        }
+
+        .players-list {
+            display: grid;
+            gap: 24px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: #00f5ff;
+            border-radius: 16px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            transition: all 0.4s ease;
+        }
+
+        .player-card:hover::before {
+            background: #00d4ff;
+        }
+
+        .player-card:hover {
+            transform: translateX(8px) translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-card.recent {
+            border: 2px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .player-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #00f5ff;
+            letter-spacing: -0.01em;
+        }
+
+        .money-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .money-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px 16px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .money-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: #00f5ff;
+            border-radius: 12px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            transition: all 0.3s ease;
+        }
+
+        .money-item:hover::before {
+            background: #00d4ff;
+        }
+
+        .money-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .money-label {
+            font-size: 0.8rem;
+            color: #888888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .money-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .profit {
+            color: #2ed573;
+        }
+
+        .fee {
+            color: #ff4757;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: #666666;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .timestamp {
+            color: #666666;
+            font-size: 0.85rem;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+
+        .loyalty-badge {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .vip-badge {
+            background: linear-gradient(45deg, #9C27B0, #673AB7);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        /* Tab system */
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00f5ff, #00d4ff);
+            color: #000000;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .operations-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .stat-card:nth-child(1) {
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .stat-card:nth-child(2) {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .stat-card:nth-child(3) {
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .stat-card:nth-child(4) {
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .money-info {
+                grid-template-columns: 1fr;
+            }
+
+            .player-card:hover {
+                transform: translateX(4px) translateY(-2px);
+            }
+
+            .operations-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .operations-header h2 {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* --- safety: force clicks to pass to buttons/tabs --- */
+        button,
+        .tab-btn {
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>💰 Money Washing Tracker</h1>
+            <p>Professional financial operations management</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalClients">0</div>
+                <div class="stat-label">Unique Clients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalOperations">0</div>
+                <div class="stat-label">Total Operations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalMoney">$0</div>
+                <div class="stat-label">Total Processed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalProfit">$0</div>
+                <div class="stat-label">Total Commission</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>New Operation</h2>
+            <div class="form-group">
+                <label for="playerName">Client Name</label>
+                <input type="text" id="playerName" placeholder="Enter client identifier">
+            </div>
+            <div class="form-group">
+                <label for="blackMoney">Transaction Amount</label>
+                <input type="number" id="blackMoney" placeholder="Enter amount (e.g., 25,000)">
+            </div>
+            <button id="createOperationBtn">Create Operation</button>
+        </div>
+
+        <div class="card">
+            <div class="tab-container">
+                <button class="tab-btn active" id="activeTab">Active Operations</button>
+                <button class="tab-btn" id="historyTab">Complete History</button>
+            </div>
+
+            <div id="active-tab" class="tab-content active">
+                <div class="operations-header">
+                    <h2>Active Operations</h2>
+                    <div>
+                        <button class="clear-btn" id="clearActiveBtn">Clear Active</button>
+                        <button class="export-btn" id="exportBtn1">Export Data</button>
+                    </div>
+                </div>
+                <div id="activeOperationsList" class="players-list">
+                    <div class="empty-state">
+                        No active operations. Create a new operation to get started.
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-tab" class="tab-content">
+                <div class="operations-header">
+                    <h2>Complete History</h2>
+                    <div>
+                        <button class="clear-btn" id="resetAllBtn">Reset All</button>
+                        <button class="export-btn" id="exportBtn2">Export Data</button>
+                    </div>
+                </div>
+                <div id="historyOperationsList" class="players-list">
+                    <div class="empty-state">
+                        No operation history.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getConfig() {
+            const cs = getComputedStyle(document.documentElement);
+            const server = parseFloat(cs.getPropertyValue('--server-fee')) || 0;
+            const your = parseFloat(cs.getPropertyValue('--your-cut')) || 0;
+            return { server, your }; // als decimale fractie, bv 0.20 en 0.05
+        }
+
+        // Global variables
+        let activeOperations = [];
+        let completedOperations = [];
+        let currentTab = 'active';
+
+        // Money formatting
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Calculate fees
+        function calculateFees(blackMoney) {
+            const { server, your } = getConfig();
+            const serverFee = blackMoney * server;
+            const yourCut = blackMoney * your;
+            const cleanMoney = blackMoney - serverFee - yourCut;
+            return {
+                serverFee,
+                yourCut,
+                cleanMoney,
+                percentServer: Math.round(server * 100),
+                percentYour: Math.round(your * 100)
+            };
+        }
+
+        // Get client operation count
+        function getClientOperationCount(clientName) {
+            return completedOperations.filter(op =>
+                op.name.toLowerCase() === clientName.toLowerCase()
+            ).length;
+        }
+
+        // Check if client is VIP (10+ operations)
+        function isVIPClient(clientName) {
+            return getClientOperationCount(clientName) >= 10;
+        }
+
+        // Check if client is loyal (3+ operations)
+        function isLoyalClient(clientName) {
+            return getClientOperationCount(clientName) >= 3;
+        }
+
+        // Add new operation
+        function addOperation() {
+            const nameInput = document.getElementById('playerName');
+            const moneyInput = document.getElementById('blackMoney');
+
+            const name = nameInput.value.trim();
+            const blackMoney = parseFloat(moneyInput.value);
+
+            if (!name || isNaN(blackMoney) || blackMoney <= 0) {
+                alert('Please enter a valid name and amount.');
+                return;
+            }
+
+            const operationCount = getClientOperationCount(name) + 1;
+
+            const operation = {
+                id: Date.now(),
+                name,
+                blackMoney,
+                operationCount,
+                timestamp: new Date().toLocaleString(),
+                isVIP: isVIPClient(name),
+                isLoyal: isLoyalClient(name)
+            };
+
+
+            activeOperations.push(operation);
+            saveData();
+            updateDisplay();
+
+            nameInput.value = '';
+            moneyInput.value = '';
+            nameInput.focus();
+        }
+
+        // Complete operation
+        function completeOperation(id) {
+            const operation = activeOperations.find(op => op.id === id);
+            if (operation) {
+                completedOperations.unshift(operation);
+                activeOperations = activeOperations.filter(op => op.id !== id);
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Remove from history
+        function removeFromHistory(id) {
+            if (confirm('Are you sure you want to remove this operation from history?')) {
+                completedOperations = completedOperations.filter(op => op.id !== id);
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Clear active operations
+        function clearActiveOperations() {
+            if (confirm('Are you sure you want to clear all active operations?')) {
+                activeOperations = [];
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+                activeOperations = [];
+                completedOperations = [];
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Export data
+        function exportData() {
+            const allOperations = [...completedOperations, ...activeOperations];
+            const { percentServer, percentYour } = (function () {
+                const { server, your } = getConfig();
+                return { percentServer: Math.round(server * 100), percentYour: Math.round(your * 100) };
+            })();
+
+            const exportSummary = allOperations.reduce((acc, op) => {
+                const { yourCut } = calculateFees(op.blackMoney);
+                acc.totalProcessed += op.blackMoney;
+                acc.totalCommission += yourCut;
+                return acc;
+            }, { totalProcessed: 0, totalCommission: 0 });
+
+            const exportData = {
+                exportDate: new Date().toLocaleString(),
+                totalOperations: allOperations.length,
+                totalProcessed: exportSummary.totalProcessed,
+                totalCommission: exportSummary.totalCommission,
+                uniqueClients: [...new Set(allOperations.map(op => op.name.toLowerCase()))].length,
+                activeOperations,
+                completedOperations
+            };
+
+            let txtContent = `=== MONEY WASHING TRACKER EXPORT ===\n`;
+            txtContent += `Export Date: ${exportData.exportDate}\n`;
+            txtContent += `Total Operations: ${exportData.totalOperations}\n`;
+            txtContent += `Total Processed: ${formatMoney(exportData.totalProcessed)}\n`;
+            txtContent += `Total Commission (${percentYour}%): ${formatMoney(exportData.totalCommission)}\n`;
+            txtContent += `Unique Clients: ${exportData.uniqueClients}\n\n`;
+
+            // Client statistics (recompute per-op)
+            const clientGroups = {};
+            allOperations.forEach(op => {
+                const key = op.name.toLowerCase();
+                if (!clientGroups[key]) {
+                    clientGroups[key] = {
+                        name: op.name,
+                        operations: [],
+                        totalProcessed: 0,
+                        totalCommission: 0,
+                        operationCount: 0
+                    };
+                }
+                const { yourCut } = calculateFees(op.blackMoney);
+                clientGroups[key].operations.push(op);
+                clientGroups[key].totalProcessed += op.blackMoney;
+                clientGroups[key].totalCommission += yourCut;
+                clientGroups[key].operationCount++;
+            });
+
+            txtContent += `=== CLIENT OVERVIEW ===\n\n`;
+            Object.values(clientGroups).forEach(client => {
+                txtContent += `CLIENT: ${client.name}\n`;
+                txtContent += `- Total Operations: ${client.operationCount}\n`;
+                txtContent += `- Total Processed: ${formatMoney(client.totalProcessed)}\n`;
+                txtContent += `- Total Commission (${percentYour}%): ${formatMoney(client.totalCommission)}\n`;
+                txtContent += `- VIP Status: ${client.operationCount >= 10 ? 'YES' : 'NO'}\n`;
+                txtContent += `- Loyal Status: ${client.operationCount >= 3 ? 'YES' : 'NO'}\n`;
+                txtContent += `\nOPERATIONS:\n`;
+                client.operations.forEach((op, index) => {
+                    const { serverFee, yourCut, cleanMoney } = calculateFees(op.blackMoney);
+                    txtContent += `  ${index + 1}. ${op.timestamp}\n`;
+                    txtContent += `     - Black Money: ${formatMoney(op.blackMoney)}\n`;
+                    txtContent += `     - Clean Return: ${formatMoney(cleanMoney)}\n`;
+                    txtContent += `     - Service Fee (${percentServer}%): ${formatMoney(serverFee)}\n`;
+                    txtContent += `     - Commission (${percentYour}%): ${formatMoney(yourCut)}\n\n`;
+                });
+                txtContent += `${'='.repeat(50)}\n\n`;
+            });
+
+            txtContent += `=== FULL DATA (JSON BACKUP) ===\n\n`;
+            txtContent += JSON.stringify(exportData, null, 2);
+
+            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `money-washing-export-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('Data successfully exported! Check your downloads folder.');
+        }
+
+        // Create operation card
+        function createOperationCard(operation, isActive = true, isRecent = false) {
+            const { serverFee, yourCut, cleanMoney, percentServer, percentYour } = calculateFees(operation.blackMoney);
+
+            const loyaltyBadge = operation.isLoyal ? `<span class="loyalty-badge">Loyal Client</span>` : '';
+            const vipBadge = operation.isVIP ? `<span class="vip-badge">VIP Client</span>` : '';
+
+            const buttonHTML = isActive ?
+                `<button type="button" class="remove-btn" onclick="completeOperation(${operation.id})">Complete Operation</button>` :
+                `<button type="button" class="remove-btn" onclick="removeFromHistory(${operation.id})">Remove from History</button>`;
+
+            return `
+                <div class="player-card ${isRecent ? 'recent' : ''}">
+                    <div class="player-name">
+                        ${operation.name}
+                        ${loyaltyBadge}
+                        ${vipBadge}
+                    </div>
+                    <div class="money-info">
+                        <div class="money-item">
+                            <div class="money-label">Original Amount</div>
+                            <div class="money-value">${formatMoney(operation.blackMoney)}</div>
+                        </div>
+                        <div class="money-item">
+                            <div class="money-label">Clean Return</div>
+                            <div class="money-value">${formatMoney(cleanMoney)}</div>
+                        </div>
+                        <div class="money-item">
+                            <div class="money-label">Service Fee (${percentServer}%)</div>
+                            <div class="money-value fee">${formatMoney(serverFee)}</div>
+                        </div>
+                        <div class="money-item">
+                            <div class="money-label">Your Commission (${percentYour}%)</div>
+                            <div class="money-value profit">${formatMoney(yourCut)}</div>
+                        </div>
+                        <div class="money-item">
+                            <div class="money-label">Total Operations</div>
+                            <div class="money-value">${operation.operationCount}</div>
+                        </div>
+                    </div>
+                    <div class="timestamp">Created: ${operation.timestamp}</div>
+                    ${buttonHTML}
+                </div>
+            `;
+        }
+
+        // Update statistics
+        function updateStats() {
+            const allOperations = [...completedOperations, ...activeOperations];
+            const uniqueClients = [...new Set(allOperations.map(op => op.name.toLowerCase()))].length;
+
+            let totalProcessed = 0;
+            let totalCommission = 0;
+
+            allOperations.forEach(op => {
+                totalProcessed += op.blackMoney;
+                const { yourCut } = calculateFees(op.blackMoney);
+                totalCommission += yourCut;
+            });
+
+            document.getElementById('totalClients').textContent = uniqueClients;
+            document.getElementById('totalOperations').textContent = allOperations.length;
+            document.getElementById('totalMoney').textContent = formatMoney(totalProcessed);
+            document.getElementById('totalProfit').textContent = formatMoney(totalCommission);
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            currentTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (tab === 'active') {
+                document.getElementById('activeTab').classList.add('active');
+            } else {
+                document.getElementById('historyTab').classList.add('active');
+            }
+
+            // Show/hide content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+
+            updateDisplay();
+        }
+
+        // Update display
+        function updateDisplay() {
+            const activeContainer = document.getElementById('activeOperationsList');
+            const historyContainer = document.getElementById('historyOperationsList');
+
+            // Active operations
+            if (activeOperations.length === 0) {
+                activeContainer.innerHTML = `<div class="empty-state">No active operations. Create a new operation to get started.</div>`;
+            } else {
+                activeContainer.innerHTML = activeOperations.map(op =>
+                    createOperationCard(op, true, false)
+                ).join('');
+            }
+
+            // History
+            if (completedOperations.length === 0) {
+                historyContainer.innerHTML = `<div class="empty-state">No operation history.</div>`;
+            } else {
+                historyContainer.innerHTML = completedOperations.map((op, index) =>
+                    createOperationCard(op, false, index < 3)
+                ).join('');
+            }
+
+            updateStats();
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('moneyWashing_activeOperations', JSON.stringify(activeOperations));
+            localStorage.setItem('moneyWashing_completedOperations', JSON.stringify(completedOperations));
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const activeData = localStorage.getItem('moneyWashing_activeOperations');
+            const completedData = localStorage.getItem('moneyWashing_completedOperations');
+
+            if (activeData) {
+                try {
+                    activeOperations = JSON.parse(activeData);
+                } catch (e) {
+                    activeOperations = [];
+                    localStorage.removeItem('moneyWashing_activeOperations');
+                }
+            }
+
+            if (completedData) {
+                try {
+                    completedOperations = JSON.parse(completedData);
+                } catch (e) {
+                    completedOperations = [];
+                    localStorage.removeItem('moneyWashing_completedOperations');
+                }
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load data and initialize display
+            loadData();
+            updateDisplay();
+
+            // Button event listeners
+            document.getElementById('createOperationBtn').addEventListener('click', addOperation);
+            document.getElementById('activeTab').addEventListener('click', () => switchTab('active'));
+            document.getElementById('historyTab').addEventListener('click', () => switchTab('history'));
+            document.getElementById('clearActiveBtn').addEventListener('click', clearActiveOperations);
+            document.getElementById('resetAllBtn').addEventListener('click', clearAllData);
+            document.getElementById('exportBtn1').addEventListener('click', exportData);
+            document.getElementById('exportBtn2').addEventListener('click', exportData);
+
+            // Enter key binding
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    const nameFocused = document.activeElement.id === 'playerName';
+                    const moneyFocused = document.activeElement.id === 'blackMoney';
+                    if (nameFocused || moneyFocused) {
+                        addOperation();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

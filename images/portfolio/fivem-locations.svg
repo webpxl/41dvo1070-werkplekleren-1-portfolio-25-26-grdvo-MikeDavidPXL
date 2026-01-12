@@ -1,0 +1,76 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2d2d2d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#404040;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bg)"/>
+  
+  <!-- Header -->
+  <rect x="20" y="20" width="360" height="50" rx="10" fill="#4CAF50" opacity="0.8"/>
+  <text x="200" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">🏪 Locatie Verkoop Tracker</text>
+  <text x="200" y="55" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">FiveM Premium Locaties</text>
+  
+  <!-- Stats -->
+  <rect x="30" y="80" width="60" height="40" rx="5" fill="rgba(255,255,255,0.1)" stroke="rgba(76,175,80,0.3)"/>
+  <text x="60" y="95" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">34</text>
+  <text x="60" y="108" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="7">KLANTEN</text>
+  
+  <rect x="100" y="80" width="60" height="40" rx="5" fill="rgba(255,255,255,0.1)" stroke="rgba(76,175,80,0.3)"/>
+  <text x="130" y="95" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">156</text>
+  <text x="130" y="108" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="7">VERKOPEN</text>
+  
+  <rect x="170" y="80" width="60" height="40" rx="5" fill="rgba(255,255,255,0.1)" stroke="rgba(76,175,80,0.3)"/>
+  <text x="200" y="95" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">$12.8M</text>
+  <text x="200" y="108" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="7">OMZET</text>
+  
+  <rect x="240" y="80" width="60" height="40" rx="5" fill="rgba(255,255,255,0.1)" stroke="rgba(76,175,80,0.3)"/>
+  <text x="270" y="95" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">$8.3M</text>
+  <text x="270" y="108" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="7">WINST</text>
+  
+  <!-- Categories -->
+  <text x="30" y="145" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">🏭 Coke Loodsen</text>
+  
+  <!-- Location Cards -->
+  <rect x="30" y="150" width="70" height="50" rx="8" fill="rgba(128,128,128,0.05)" stroke="rgba(128,128,128,0.2)"/>
+  <rect x="35" y="155" width="60" height="25" rx="5" fill="#555" opacity="0.8"/>
+  <text x="65" y="175" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Coke Lab 1</text>
+  <text x="65" y="188" text-anchor="middle" fill="#81C784" font-family="Arial, sans-serif" font-size="8">$1,000,000</text>
+  
+  <rect x="110" y="150" width="70" height="50" rx="8" fill="rgba(128,128,128,0.05)" stroke="rgba(128,128,128,0.2)"/>
+  <rect x="115" y="155" width="60" height="25" rx="5" fill="#555" opacity="0.8"/>
+  <text x="145" y="175" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Coke Lab 2</text>
+  <text x="145" y="188" text-anchor="middle" fill="#81C784" font-family="Arial, sans-serif" font-size="8">$1,250,000</text>
+  
+  <rect x="190" y="150" width="70" height="50" rx="8" fill="rgba(128,128,128,0.05)" stroke="rgba(128,128,128,0.2)"/>
+  <rect x="195" y="155" width="60" height="25" rx="5" fill="#555" opacity="0.8"/>
+  <text x="225" y="175" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Coke Lab 3</text>
+  <text x="225" y="188" text-anchor="middle" fill="#81C784" font-family="Arial, sans-serif" font-size="8">$1,500,000</text>
+  
+  <text x="30" y="220" fill="#4CAF50" font-family="Arial, sans-serif" font-size="11" font-weight="bold">⚗️ Meth Loodsen</text>
+  
+  <!-- Meth Labs -->
+  <rect x="30" y="225" width="70" height="50" rx="8" fill="rgba(128,128,128,0.05)" stroke="rgba(128,128,128,0.2)"/>
+  <rect x="35" y="230" width="60" height="25" rx="5" fill="#555" opacity="0.8"/>
+  <text x="65" y="250" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Meth Lab A</text>
+  <text x="65" y="263" text-anchor="middle" fill="#81C784" font-family="Arial, sans-serif" font-size="8">$850,000</text>
+  
+  <rect x="110" y="225" width="70" height="50" rx="8" fill="rgba(128,128,128,0.05)" stroke="rgba(128,128,128,0.2)"/>
+  <rect x="115" y="230" width="60" height="25" rx="5" fill="#555" opacity="0.8"/>
+  <text x="145" y="250" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Meth Lab B</text>
+  <text x="145" y="263" text-anchor="middle" fill="#81C784" font-family="Arial, sans-serif" font-size="8">$625,000</text>
+  
+  <!-- Shopping Cart -->
+  <rect x="280" y="150" width="100" height="120" rx="10" fill="rgba(128,128,128,0.1)" stroke="rgba(76,175,80,0.3)"/>
+  <text x="330" y="170" text-anchor="middle" fill="#4CAF50" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Winkelmandje</text>
+  <text x="290" y="185" fill="#ccc" font-family="Arial, sans-serif" font-size="8">Kopen/Huren opties</text>
+  <text x="290" y="200" fill="#ccc" font-family="Arial, sans-serif" font-size="8">Upgrade mogelijkheden</text>
+  <text x="290" y="215" fill="#ccc" font-family="Arial, sans-serif" font-size="8">Automatische berekening</text>
+  
+  <rect x="290" y="240" width="80" height="20" rx="5" fill="#4CAF50"/>
+  <text x="330" y="253" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Verkoop Voltooien</text>
+</svg>

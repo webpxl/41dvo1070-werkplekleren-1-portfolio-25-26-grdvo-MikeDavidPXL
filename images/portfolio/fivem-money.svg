@@ -1,0 +1,57 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2d2d2d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#404040;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00f5ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8a2be2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bg)"/>
+  
+  <!-- Header -->
+  <rect x="20" y="20" width="360" height="60" rx="15" fill="url(#accent)" opacity="0.8"/>
+  <text x="200" y="45" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">💰 Money Washing Tracker</text>
+  <text x="200" y="65" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="11" opacity="0.9">Professional financial operations</text>
+  
+  <!-- Stats Cards -->
+  <rect x="30" y="100" width="70" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#00f5ff"/>
+  <text x="65" y="120" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">24</text>
+  <text x="65" y="135" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="8">CLIENTS</text>
+  
+  <rect x="110" y="100" width="70" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#00f5ff"/>
+  <text x="145" y="120" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">89</text>
+  <text x="145" y="135" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="8">OPERATIONS</text>
+  
+  <rect x="190" y="100" width="70" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#00f5ff"/>
+  <text x="225" y="120" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">$8.2M</text>
+  <text x="225" y="135" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="8">PROCESSED</text>
+  
+  <rect x="270" y="100" width="70" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#00f5ff"/>
+  <text x="305" y="120" text-anchor="middle" fill="#2ed573" font-family="Arial, sans-serif" font-size="12" font-weight="bold">$410K</text>
+  <text x="305" y="135" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-size="8">PROFIT</text>
+  
+  <!-- Form Card -->
+  <rect x="30" y="170" width="340" height="80" rx="15" fill="rgba(255,255,255,0.02)" stroke="#00f5ff"/>
+  <text x="50" y="195" fill="#00f5ff" font-family="Arial, sans-serif" font-size="12" font-weight="bold">New Operation</text>
+  
+  <!-- Form Fields -->
+  <rect x="50" y="205" width="120" height="20" rx="5" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)"/>
+  <text x="55" y="218" fill="#ccc" font-family="Arial, sans-serif" font-size="9">Client Name</text>
+  
+  <rect x="180" y="205" width="100" height="20" rx="5" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)"/>
+  <text x="185" y="218" fill="#ccc" font-family="Arial, sans-serif" font-size="9">Transaction Amount</text>
+  
+  <rect x="290" y="205" width="70" height="20" rx="5" fill="url(#accent)"/>
+  <text x="325" y="218" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="9" font-weight="bold">Create Operation</text>
+  
+  <!-- Active Operations List Preview -->
+  <rect x="50" y="235" width="300" height="10" rx="3" fill="rgba(255,255,255,0.05)"/>
+  <text x="55" y="243" fill="#888" font-family="Arial, sans-serif" font-size="8">Active Operations List...</text>
+</svg>

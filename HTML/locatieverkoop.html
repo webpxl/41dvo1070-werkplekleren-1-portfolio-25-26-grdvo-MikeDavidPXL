@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiveM Locatie Verkoop Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040);
+      min-height: 100vh;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: #4CAF50;
+      font-size: 1.1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: rgba(128, 128, 128, 0.1);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #ccc;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .main-card {
+      background: rgba(128, 128, 128, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      color: #4CAF50;
+    }
+
+    .location-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .category-card {
+      background: rgba(128, 128, 128, 0.05);
+      border-radius: 15px;
+      padding: 20px;
+      border: 1px solid rgba(128, 128, 128, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .category-card:hover {
+      border-color: rgba(76, 175, 80, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .category-title {
+      font-size: 1.2rem;
+      color: #4CAF50;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .location-item {
+      background: rgba(128, 128, 128, 0.05);
+      border-radius: 10px;
+      padding: 15px;
+      border: 1px solid rgba(128, 128, 128, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .location-item:hover {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .location-item.selected {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.2);
+    }
+
+    .location-image {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(45deg, #555555, #777777);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      font-size: 2rem;
+      color: #4CAF50;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .location-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+    }
+
+    .location-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #4CAF50;
+    }
+
+    .location-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #81C784;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .client-row {
+      display: grid;
+      grid-template-columns: 2fr auto;
+      gap: 15px;
+      align-items: end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: #ccc;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 12px 15px;
+      border: 1px solid rgba(128, 128, 128, 0.3);
+      border-radius: 10px;
+      background: rgba(128, 128, 128, 0.1);
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .form-group option {
+      background: #404040;
+      color: #fff;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, #666, #333);
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    .btn-clear {
+      background: linear-gradient(45deg, #f44336, #d32f2f);
+      color: white;
+      margin-left: 10px;
+    }
+
+    .order-summary {
+      background: rgba(128, 128, 128, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .summary-total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #4CAF50;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+
+    .sales-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .sale-card {
+      background: rgba(128, 128, 128, 0.05);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(128, 128, 128, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .sale-card.recent {
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+
+    .sale-card:hover {
+      transform: translateX(5px);
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+
+    .sale-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .client-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #4CAF50;
+    }
+
+    .timestamp {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .sale-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .detail-item {
+      background: rgba(128, 128, 128, 0.03);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid rgba(128, 128, 128, 0.1);
+    }
+
+    .detail-label {
+      color: #aaa;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .location-type {
+      color: #4CAF50;
+    }
+
+    .price {
+      color: #81C784;
+    }
+
+    .total {
+      color: #66BB6A;
+    }
+
+    .sales {
+      color: #A5D6A7;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(128, 128, 128, 0.1);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 15px 20px;
+      background: transparent;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .loyalty-badge {
+      background: linear-gradient(45deg, #FF9800, #F57C00);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .sale-details {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .location-categories {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* --- Hover actie-overlay op elke location-item --- */
+    .location-item {
+      position: relative;
+      /* zodat overlay absolute kan positioneren */
+    }
+
+    .location-item .action-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+      padding: 10px;
+    }
+
+    .location-item:hover .action-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .action-overlay .overlay-btn {
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      background: rgba(128, 128, 128, 0.15);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      backdrop-filter: blur(6px);
+    }
+
+    .action-overlay .overlay-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(128, 128, 128, 0.25);
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+
+    /* kleurtjes per actie */
+    .overlay-sold {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .overlay-buy {
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+
+    .overlay-rent {
+      border-color: rgba(255, 152, 0, 0.6);
+    }
+
+    /* VERKOCHT badge + uitgeschakeld item */
+    .location-item.sold {
+      opacity: 0.75;
+    }
+
+    .location-item .sold-ribbon {
+      position: absolute;
+      top: 10px;
+      left: -22px;
+      transform: rotate(-45deg);
+      background: linear-gradient(45deg, #d32f2f, #b71c1c);
+      color: #fff;
+      padding: 4px 36px;
+      /* kleiner */
+      font-size: 11px;
+      /* kleiner */
+      font-weight: 700;
+      letter-spacing: .5px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: none;
+    }
+
+    .location-item.sold .sold-ribbon {
+      display: block;
+    }
+
+    .sold-ribbon .sold-close {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      width: 18px;
+      height: 18px;
+      line-height: 16px;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .sold-ribbon .sold-close:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+
+    /* Mandje lijntjes */
+    .cart-line {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .cart-line .tag {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(128, 128, 128, 0.1);
+      display: inline-block;
+    }
+
+    .cart-remove {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: linear-gradient(45deg, #666, #333);
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(45deg, #616161, #424242);
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Locatie Verkoop Tracker ✔️</h1>
+      <p>FiveM Premium Locaties & Activiteiten</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalClients">0</div>
+        <div class="stat-label">Unieke Klanten</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalSales">0</div>
+        <div class="stat-label">Totale Verkopen</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalRevenue">$0</div>
+        <div class="stat-label">Bruto Omzet</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalProfit">$0</div>
+        <div class="stat-label">Netto Winst</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="loyaltyCustomers">0</div>
+        <div class="stat-label">Loyalty Klanten</div>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <h2 class="card-title">🏪 Nieuwe Locatie Verkoop</h2>
+
+
+
+      <div class="location-categories">
+        <!-- Coke Loodsen -->
+        <div class="category-card">
+          <div class="category-title">
+            🏭 Coke Loodsen
+          </div>
+          <div class="location-grid">
+            <div class="location-item" data-type="coke-loods" data-price="1000000" data-name="Coke Loods A">
+              <div class="location-image"><img src="../images/fivem/Coke/lab1.jpg" alt=""></div>
+              <div class="location-name">Coke Loods 1</div>
+              <div class="location-price">$1,000,000</div>
+            </div>
+            <div class="location-item" data-type="coke-loods" data-price="1250000" data-name="Coke Loods B">
+              <div class="location-image"><img src="../images/fivem/Coke/lab2.jpg" alt=""></div>
+              <div class="location-name">Coke Loods 2</div>
+              <div class="location-price">$1,250,000</div>
+            </div>
+            <div class="location-item" data-type="coke-loods" data-price="1500000" data-name="Coke Loods C">
+              <div class="location-image"><img src="../images/fivem/Coke/lab3.jpg" alt=""></div>
+              <div class="location-name">Coke Loods 3</div>
+              <div class="location-price">$1,500,000</div>
+            </div>
+            <div class="location-item" data-type="coke-loods" data-price="1750000" data-name="Coke Loods D">
+              <div class="location-image"><img src="../images/fivem/Coke/lab4.jpg" alt=""></div>
+              <div class="location-name">Coke Loods 4</div>
+              <div class="location-price">$1,750,000</div>
+            </div>
+            <div class="location-item" data-type="coke-loods" data-price="2500000" data-name="Coke Loods Premium">
+              <div class="location-image"><img src="../images/fivem/Coke/lab5.jpg" alt=""></div>
+              <div class="location-name">Coke Loods Premium</div>
+              <div class="location-price">$2,500,000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meth Loodsen -->
+        <div class="category-card">
+          <div class="category-title">
+            ⚗️ Meth Loodsen
+          </div>
+          <div class="location-grid">
+            <div class="location-item" data-type="meth-loods" data-price="850000" data-name="Meth Lab A">
+              <div class="location-image"><img src="../images/fivem/Meth/1.jpg" alt=""></div>
+              <div class="location-name">Meth Lab A</div>
+              <div class="location-price">$850,000</div>
+            </div>
+            <div class="location-item" data-type="meth-loods" data-price="625000" data-name="Meth Lab B">
+              <div class="location-image"><img src="../images/fivem/Meth/2.png" alt=""></div>
+              <div class="location-name">Meth Lab B</div>
+              <div class="location-price">$625,000</div>
+            </div>
+            <div class="location-item" data-type="meth-loods" data-price="495000" data-name="Meth Lab C">
+              <div class="location-image"><img src="../images/fivem/Meth/3.jpg" alt=""></div>
+              <div class="location-name">Meth Lab C</div>
+              <div class="location-price">$495,000</div>
+            </div>
+            <div class="location-item" data-type="meth-loods" data-price="745000" data-name="Meth Lab D">
+              <div class="location-image"><img src="../images/fivem/Meth/4.png" alt=""></div>
+              <div class="location-name">Meth Lab D</div>
+              <div class="location-price">$745,000</div>
+            </div>
+            <div class="location-item" data-type="meth-loods" data-price="695000" data-name="Meth Lab Premium">
+              <div class="location-image"><img src="../images/fivem/Meth/5.jpg" alt=""></div>
+              <div class="location-name">Meth Lab Premium</div>
+              <div class="location-price">$695,000</div>
+            </div>
+            <div class="location-item" data-type="meth-loods" data-price="565000" data-name="Meth Lab Premium">
+              <div class="location-image"><img src="../images/fivem/Meth/6.png" alt=""></div>
+              <div class="location-name">Meth Lab Premium</div>
+              <div class="location-price">$565,000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shops & Benches -->
+        <div class="category-card">
+          <div class="category-title">
+            🏪 Shops & Benches
+          </div>
+          <div class="location-grid">
+            <div class="location-item" data-type="guns-shop" data-price="450000" data-name="Gun Shop">
+              <div class="location-image">🔫</div>
+              <div class="location-name">Guns Shop</div>
+              <div class="location-price">$450,000</div>
+            </div>
+            <div class="location-item" data-type="Melee-shop" data-price="350000" data-name="Melee Shop">
+              <div class="location-image">🗡️</div>
+              <div class="location-name">Melee Shop</div>
+              <div class="location-price">$350,000</div>
+            </div>
+            <div class="location-item" data-type="C4-bench" data-price="350000" data-name="C4 Bench">
+              <div class="location-image">💣</div>
+              <div class="location-name">C4 Bench</div>
+              <div class="location-price">$350,000</div>
+            </div>
+            <div class="location-item" data-type="coke-shop" data-price="50000" data-name="Coke Shop">
+              <div class="location-image">🏪</div>
+              <div class="location-name">Coke Shop</div>
+              <div class="location-price">$50,000</div>
+            </div>
+            <div class="location-item" data-type="meth-bench" data-price="100000" data-name="Meth Bench">
+              <div class="location-image">⚗️</div>
+              <div class="location-name">Meth Bench</div>
+              <div class="location-price">$100,000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pluk Locaties -->
+        <div class="category-card">
+          <div class="category-title">
+            🌿 Pluk Locaties
+          </div>
+          <div class="location-grid">
+            <div class="location-item" data-type="wiet-pluk" data-price="250000" data-name="Wiet Farm">
+              <div class="location-image">🌱</div>
+              <div class="location-name">Wiet Farm </div>
+              <div class="location-price">$250,000</div>
+            </div>
+            <div class="location-item" data-type="coke-pluk" data-price="350000" data-name="Coke Farm">
+              <div class="location-image">🌿</div>
+              <div class="location-name">Coke Farm </div>
+              <div class="location-price">$350,000</div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="form-row">
+        <div class="client-row">
+          <div class="form-group">
+            <label>Klant Naam</label>
+            <input type="text" id="clientName" placeholder="Voer klant naam in">
+          </div>
+        </div>
+      </div>
+
+      <div id="orderSummary" class="order-summary" style="display: none;">
+        <h4 style="color: #4CAF50; margin-bottom: 10px;">Verkoop Overzicht:</h4>
+        <div id="summaryItems"></div>
+      </div>
+
+      <button class="btn btn-primary" id="addBtn" style="margin-top: 20px;">Verkoop Voltooien</button>
+    </div>
+
+    <div class="main-card">
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="switchTab('recent')">Recente Verkopen</button>
+        <button class="tab-btn" onclick="switchTab('history')">Volledige Historie</button>
+        <button class="btn btn-clear" onclick="clearAllData()">Reset Alles</button>
+        <button class="btn btn-primary" onclick="exportData()"
+          style="background: linear-gradient(45deg, #2E7D32, #1B5E20); margin-left: 10px;">Export Data</button>
+      </div>
+
+      <div id="recent-tab" class="tab-content active">
+        <h2 class="card-title">📋 Recente Verkopen</h2>
+        <div id="recentSalesList" class="sales-list">
+          <div class="empty-state">
+            Geen recente verkopen. Voeg je eerste verkoop toe.
+          </div>
+        </div>
+      </div>
+
+      <div id="history-tab" class="tab-content">
+        <h2 class="card-title">📚 Volledige Historie</h2>
+        <div id="historySalesList" class="sales-list">
+          <div class="empty-state">
+            Geen verkoop historie.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ======= STATE ======= */
+    let sales = [];
+    let recentSales = [];
+    let currentTab = 'recent';
+
+    let cart = [];                 // { type, name, price, base, mode, upgrades? }
+    const soldSet = new Set();     // "type|name"
+
+    /* ======= CONFIG ======= */
+    // Vaste huurprijs & duur
+    const RENT_WEEK_PRICE = 100000;
+    const RENT_DAYS = 7;
+
+    // Vaste winstmarges
+    const METH_PROFIT_NO_UPGR = 250000; // meth zonder upgrades
+    const METH_PROFIT_WITH_UPGR = 450000; // meth met upgrades (jouw wens)
+    const COKE_PROFIT = 450000; // coke loods 
+    //WINST IN HET BEGIN MAAR 450K, als ik ze allemaal heb dit veranderen naar wat je maar wilt;D
+
+    // Upgrades (alleen meth-loods)
+    const UPGRADE_SURCHARGE = 950000;
+
+    // Types met $0 inkoop (pure winst)
+    const pureProfitTypes = new Set([
+      'wiet-pluk', 'coke-pluk',
+      'guns-shop', 'coke-shop', 'meth-bench', 'C4-bench'
+    ]);
+
+    /* ======= STORAGE ======= */
+    function loadData() {
+      sales = JSON.parse(localStorage.getItem('fivem_location_sales') || '[]');
+      recentSales = JSON.parse(localStorage.getItem('fivem_recent_location_sales') || '[]');
+      cart = JSON.parse(localStorage.getItem('fivem_location_cart') || '[]');
+      const soldArr = JSON.parse(localStorage.getItem('fivem_location_sold') || '[]');
+
+      // laad alles wat er staat
+      soldArr.forEach(k => soldSet.add(k));
+
+      // >>> MIGRATIE: als er oude keys zonder |price bestaan,
+      // map ze naar de juiste kaarten met hun eigen price.
+      const oldKeys = new Set(soldArr.filter(k => k.split('|').length === 2));
+      if (oldKeys.size) {
+        document.querySelectorAll('.location-item').forEach(item => {
+          const t = item.dataset.type, n = item.dataset.name, p = item.dataset.price;
+          if (oldKeys.has(`${t}|${n}`)) {
+            soldSet.add(itemKey(t, n, p));
+          }
+        });
+        // oude keys opruimen
+        [...oldKeys].forEach(k => soldSet.delete(k));
+        saveData();
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem('fivem_location_sales', JSON.stringify(sales));
+      localStorage.setItem('fivem_recent_location_sales', JSON.stringify(recentSales));
+      localStorage.setItem('fivem_location_cart', JSON.stringify(cart));
+      localStorage.setItem('fivem_location_sold', JSON.stringify([...soldSet]));
+    }
+
+    /* ======= HELPERS ======= */
+    const itemKey = (type, name, price) => `${type}|${name}|${price}`;
+    const formatMoney = n => '$' + Number(n).toLocaleString();
+
+    // Backwards compatible check: accepteer oude keys zonder |price
+    function hasSold(type, name, price) {
+      return soldSet.has(itemKey(type, name, price)) || soldSet.has(`${type}|${name}`);
+    }
+    function markSold(type, name, price) {
+      // verwijder evt. oude key, sla nieuwe (unieke) op
+      soldSet.delete(`${type}|${name}`);
+      soldSet.add(itemKey(type, name, price));
+      saveData();
+    }
+    function unmarkSold(type, name, price) {
+      soldSet.delete(itemKey(type, name, price));
+      soldSet.delete(`${type}|${name}`); // oude key weghalen
+      saveData();
+    }
+
+
+    // Inkoopkosten: bij huren altijd 0.
+    // Bij meth-loods kopen + upgrades => kaartprijs + upgradekosten.
+    // Bij meth/coke kopen zonder upgrades => kaartprijs.
+    // Overige pureProfit => 0.
+    function getCosts(type, displayedPrice, mode, upgrades = false) {
+      if (mode === 'huren') return 0;
+      const base = parseInt(displayedPrice);
+      if (type === 'meth-loods') {
+        return upgrades ? (base + UPGRADE_SURCHARGE) : base;
+      }
+      if (type === 'coke-loods') {
+        return base;
+      }
+      if (pureProfitTypes.has(type)) return 0;
+      return 0;
+    }
+
+    // Prijsberekening zonder loyalty
+    function calculatePrice(locationType, saleBasePrice, displayedPriceForCosts, mode, upgrades = false) {
+      const basePrice = parseInt(saleBasePrice);
+      const finalPrice = basePrice;
+      const costs = getCosts(locationType, displayedPriceForCosts, mode, upgrades);
+      return {
+        basePrice,
+        finalPrice,
+        costs,
+        profit: finalPrice - costs
+      };
+    }
+
+    /* ======= CART ======= */
+    function addToCart(type, name, displayedPrice, mode = 'kopen', opts = {}) {
+      const disp = parseInt(displayedPrice);
+
+      // Huren bij loodsen = vaste prijs en 0 kosten
+      if (mode === 'huren' && (type === 'meth-loods' || type === 'coke-loods')) {
+        cart.push({
+          type, name,
+          price: RENT_WEEK_PRICE,   // verhuurprijs
+          base: disp,               // kaartprijs (alleen informatief; kosten worden 0 bij huren)
+          mode,
+          upgrades: false,
+          rentalDays: RENT_DAYS
+        });
+        saveData(); renderCart();
+        return;
+      }
+
+      // Kopen
+      let salePrice;
+      let upgrades = !!opts.upgrades;
+
+      if (type === 'meth-loods') {
+        // meth: als upgrades -> verkoop = (kaartprijs + upgrades) + vaste winst 250k
+        //       zonder -> verkoop = kaartprijs + winst 150k
+        if (upgrades) {
+          salePrice = disp + UPGRADE_SURCHARGE + METH_PROFIT_WITH_UPGR;
+        } else {
+          salePrice = disp + METH_PROFIT_NO_UPGR;
+        }
+      } else if (type === 'coke-loods') {
+        // coke: verkoop = kaartprijs + vaste winst 250k
+        salePrice = disp + COKE_PROFIT;
+        upgrades = false; // geen upgrades op coke
+      } else {
+        // overige types: verkoop = kaartprijs (pure winst in kosten)
+        salePrice = disp;
+        upgrades = false;
+      }
+
+      cart.push({
+        type, name,
+        price: salePrice, // wat klant betaalt
+        base: disp,       // kaartprijs
+        mode,
+        upgrades
+      });
+      saveData(); renderCart();
+    }
+    function removeFromCart(index) { cart.splice(index, 1); saveData(); renderCart(); }
+    function clearCart() { cart = []; saveData(); renderCart(); }
+
+    function renderCart() {
+      const summary = document.getElementById('orderSummary');
+      const summaryItems = document.getElementById('summaryItems');
+      if (!summary || !summaryItems) return;
+
+      if (cart.length === 0) {
+        summary.style.display = 'none';
+        summaryItems.innerHTML = '';
+        return;
+      }
+      summary.style.display = 'block';
+
+      let total = 0;
+      let html = '';
+      cart.forEach((it, idx) => {
+        total += it.price;
+        const tags = [
+          it.type,
+          it.mode,
+          (it.upgrades ? 'upgrades' : null),
+          (it.rentalDays ? `${it.rentalDays}d huur` : null)
+        ].filter(Boolean).map(t => `<span class="tag" style="margin-left:6px;">${t}</span>`).join('');
+
+        html += `
+      <div class="cart-line">
+        <div><strong>${it.name}</strong>${tags}</div>
+        <div></div>
+        <div style="font-weight:600;">${formatMoney(it.price)}</div>
+        <button class="cart-remove" onclick="removeFromCart(${idx})">Verwijder</button>
+      </div>
+    `;
+      });
+
+      html += `
+    <div class="summary-item summary-total" style="margin-top:8px;">
+      <span>Subtotaal:</span>
+      <span>${formatMoney(total)}</span>
+    </div>
+    <div class="cart-actions">
+      <button class="btn btn-secondary" onclick="clearCart()">Leeg Mandje</button>
+    </div>
+  `;
+      summaryItems.innerHTML = html;
+    }
+
+    /* ======= CHECKOUT ======= */
+    function checkoutCart() {
+      const clientName = document.getElementById('clientName').value.trim();
+      if (!clientName) { alert('Voer een klant naam in'); return; }
+      if (cart.length === 0) { alert('Je mandje is leeg'); return; }
+
+      const now = new Date();
+      const nowStr = now.toLocaleString('nl-NL');
+      const newSales = [];
+
+      cart.forEach(it => {
+        const saleCalc = calculatePrice(
+          it.type,
+          it.price,  // wat klant betaalt
+          it.base,   // kaartprijs (voor kosten bij kopen)
+          it.mode,
+          it.upgrades
+        );
+
+        // Einddatum voor huurcontracten (alleen loodsen)
+        let rentalEnd = null;
+        if (it.mode === 'huren' && (it.type === 'meth-loods' || it.type === 'coke-loods')) {
+          const end = new Date(now.getTime() + RENT_DAYS * 24 * 60 * 60 * 1000);
+          rentalEnd = end.toISOString();
+        }
+
+        const sale = {
+          id: Date.now() + Math.floor(Math.random() * 100000),
+          clientName,
+          locationType: it.type,
+          locationName: it.name,
+          basePrice: saleCalc.basePrice,
+          finalPrice: saleCalc.finalPrice,
+          costs: saleCalc.costs,
+          profit: saleCalc.profit,
+          mode: it.mode,
+          upgrades: !!it.upgrades,
+          rentalEnd,
+          timestamp: nowStr
+        };
+
+        newSales.push(sale);
+      });
+
+      newSales.forEach(s => { sales.unshift(s); recentSales.unshift(s); });
+      saveData();
+      updateDisplay();
+
+      clearCart();
+      document.getElementById('clientName').value = '';
+      document.getElementById('clientName').focus();
+      alert('Verkoop voltooid!');
+    }
+
+    /* ======= UPGRADE-PROMPT (alleen meth-loods bij Kopen) ======= */
+    let upgradeModal;
+    function ensureUpgradeModal() {
+      if (upgradeModal) return;
+      upgradeModal = document.createElement('div');
+      upgradeModal.style.position = 'fixed';
+      upgradeModal.style.inset = '0';
+      upgradeModal.style.background = 'rgba(0,0,0,0.6)';
+      upgradeModal.style.display = 'none';
+      upgradeModal.style.alignItems = 'center';
+      upgradeModal.style.justifyContent = 'center';
+      upgradeModal.innerHTML = `
+    <div style="background:#2b2b2b;border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:20px;min-width:280px;max-width:90%;text-align:center;">
+      <div id="um-title" style="font-weight:700;color:#4CAF50;margin-bottom:6px;">Meth Loods Upgrades</div>
+      <div id="um-name" style="opacity:.9;margin-bottom:14px;"></div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button id="um-with" class="btn btn-primary" style="padding:10px 14px;">Met upgrades (+$${UPGRADE_SURCHARGE.toLocaleString()})</button>
+        <button id="um-without" class="btn btn-secondary" style="padding:10px 14px;">Zonder upgrades</button>
+      </div>
+      <button id="um-cancel" class="btn btn-danger" style="margin-top:12px;padding:8px 12px;">Annuleren</button>
+    </div>
+  `;
+      document.body.appendChild(upgradeModal);
+    }
+    function openUpgradePrompt({ type, name, price }) {
+      ensureUpgradeModal();
+      upgradeModal.style.display = 'flex';
+      const baseSale = parseInt(price) + METH_PROFIT_NO_UPGR;
+      upgradeModal.querySelector('#um-name').textContent =
+        `${name} — zonder upgrades: ${formatMoney(baseSale)} | met upgrades: ${formatMoney(parseInt(price) + UPGRADE_SURCHARGE + METH_PROFIT_WITH_UPGR)}`;
+
+      const cleanup = () => { upgradeModal.style.display = 'none'; };
+
+      upgradeModal.querySelector('#um-with').onclick = () => {
+        addToCart(type, name, price, 'kopen', { upgrades: true });
+        cleanup();
+      };
+      upgradeModal.querySelector('#um-without').onclick = () => {
+        addToCart(type, name, price, 'kopen', { upgrades: false });
+        cleanup();
+      };
+      upgradeModal.querySelector('#um-cancel').onclick = cleanup;
+
+      upgradeModal.onclick = (e) => { if (e.target === upgradeModal) cleanup(); };
+    }
+
+    /* ======= ITEM UI (overlay + ribbon) ======= */
+    function initItemOverlays() {
+      document.querySelectorAll('.location-item').forEach(item => {
+        item.style.position = 'relative';
+
+        const type = item.dataset.type;
+        const name = item.dataset.name;
+        const price = item.dataset.price; // BELANGRIJK: meenemen voor unieke key
+
+        const isLoods = (type === 'coke-loods' || type === 'meth-loods');
+
+        // Ribbon voor verkocht (blijft via localStorage)
+        let ribbon = item.querySelector('.sold-ribbon');
+        if (!ribbon) {
+          ribbon = document.createElement('div');
+          ribbon.className = 'sold-ribbon';
+          ribbon.innerHTML = `VERKOCHT <button class="sold-close" title="Beschikbaar maken">&times;</button>`;
+          item.appendChild(ribbon);
+        }
+        ribbon.querySelector('.sold-close')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          unmarkSold(type, name, price);
+          item.classList.remove('sold');
+        });
+
+        // Overlay knoppen (loodsen = 3 knoppen, anders alleen kopen)
+        let overlay = item.querySelector('.action-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.className = 'action-overlay';
+          item.appendChild(overlay);
+        }
+        overlay.innerHTML = isLoods
+          ? `
+        <button class="overlay-btn overlay-sold">Verkocht</button>
+        <button class="overlay-btn overlay-buy">Kopen</button>
+        <button class="overlay-btn overlay-rent">Huren</button>
+      `
+          : `<button class="overlay-btn overlay-buy">Kopen</button>`;
+
+        // Listeners
+        if (isLoods) {
+          overlay.querySelector('.overlay-sold').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (hasSold(type, name, price)) {
+              unmarkSold(type, name, price);
+              item.classList.remove('sold');
+            } else {
+              markSold(type, name, price);
+              item.classList.add('sold');
+            }
+          });
+
+          overlay.querySelector('.overlay-buy').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (type === 'meth-loods') {
+              openUpgradePrompt({ type, name, price });
+            } else {
+              addToCart(type, name, price, 'kopen');
+            }
+          });
+
+          overlay.querySelector('.overlay-rent').addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(type, name, price, 'huren');
+          });
+        } else {
+          overlay.querySelector('.overlay-buy').addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(type, name, price, 'kopen');
+          });
+        }
+
+        // Quick click: kopen (meth -> prompt upgrades), tenzij loods is verkocht
+        item.addEventListener('click', () => {
+          if (isLoods && hasSold(type, name, price)) return;
+          if (type === 'meth-loods') {
+            openUpgradePrompt({ type, name, price });
+          } else {
+            addToCart(type, name, price, 'kopen');
+          }
+        });
+
+        // Sold state bij load
+        if (hasSold(type, name, price)) item.classList.add('sold'); else item.classList.remove('sold');
+      });
+    }
+
+    /* ======= LIJSTEN / UI ======= */
+    function removeSale(id) {
+      if (confirm('Weet je zeker dat je deze verkoop wilt verwijderen?')) {
+        sales = sales.filter(sale => sale.id !== id);
+        saveData();
+        updateDisplay();
+      }
+    }
+    function removeFromRecent(id) {
+      if (confirm('Weet je zeker dat je deze verkoop uit recente verkopen wilt verwijderen? (Blijft wel in volledige historie)')) {
+        recentSales = recentSales.filter(sale => sale.id !== id);
+        saveData();
+        updateDisplay();
+      }
+    }
+    function clearAllData() {
+      if (confirm('Weet je zeker dat je ALLE gegevens wilt wissen? Dit kan niet ongedaan gemaakt worden!')) {
+        sales = [];
+        recentSales = [];
+        cart = [];
+        soldSet.clear();
+        saveData();
+        updateDisplay();
+        renderCart();
+      }
+    }
+    function exportData() {
+      const exportData = {
+        exportDate: new Date().toLocaleString('nl-NL'),
+        totalSales: sales.length,
+        totalRevenue: sales.reduce((sum, sale) => sum + sale.finalPrice, 0),
+        uniqueClients: [...new Set(sales.map(s => s.clientName.toLowerCase()))].length,
+        allSales: sales,
+        recentSales: recentSales,
+        cartSnapshot: cart,
+        sold: [...soldSet]
+      };
+
+      let txtContent = `=== FIVEM LOCATIE VERKOOP EXPORT ===\n`;
+      txtContent += `Export Datum: ${exportData.exportDate}\n`;
+      txtContent += `Totaal Verkopen: ${exportData.totalSales}\n`;
+      txtContent += `Totale Omzet: ${exportData.totalRevenue.toLocaleString()}\n`;
+      txtContent += `Unieke Klanten: ${exportData.uniqueClients}\n\n`;
+
+      const clientGroups = {};
+      sales.forEach(sale => {
+        const clientKey = sale.clientName.toLowerCase();
+        if (!clientGroups[clientKey]) {
+          clientGroups[clientKey] = { name: sale.clientName, sales: [], totalSpent: 0, totalPurchases: 0 };
+        }
+        clientGroups[clientKey].sales.push(sale);
+        clientGroups[clientKey].totalSpent += sale.finalPrice;
+        clientGroups[clientKey].totalPurchases++;
+      });
+
+      txtContent += `=== KLANT OVERZICHT ===\n\n`;
+      Object.values(clientGroups).forEach(client => {
+        txtContent += `KLANT: ${client.name}\n`;
+        txtContent += `- Totaal Aankopen: ${client.totalPurchases}\n`;
+        txtContent += `\nVERKOPEN:\n`;
+        client.sales.forEach((sale, index) => {
+          txtContent += `  ${index + 1}. ${sale.timestamp}\n`;
+          txtContent += `     - ${sale.locationName} (${sale.locationType})\n`;
+          txtContent += `     - Basis prijs: ${sale.basePrice.toLocaleString()}\n`;
+          if (sale.mode) txtContent += `     - Modus: ${sale.mode}\n`;
+          if (sale.upgrades) txtContent += `     - Upgrades: JA (+$${UPGRADE_SURCHARGE.toLocaleString()})\n`;
+          if (sale.rentalEnd) txtContent += `     - Huur t/m: ${new Date(sale.rentalEnd).toLocaleDateString('nl-NL')}\n`;
+          txtContent += `     - Inkoopkosten: ${sale.costs.toLocaleString()}\n`;
+          txtContent += `     TOTAAL: ${sale.finalPrice.toLocaleString()}\n\n`;
+        });
+        txtContent += `${'='.repeat(50)}\n\n`;
+      });
+
+      txtContent += `=== VOLLEDIGE DATA (JSON BACKUP) ===\n\n`;
+      txtContent += JSON.stringify(exportData, null, 2);
+
+      const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fivem-locatie-verkoop-export-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      alert('Data succesvol geëxporteerd! Check je downloads folder.');
+    }
+
+    function createSaleCard(sale, isRecent = false, showInRecentTab = false) {
+      const modeTag = sale.mode ? `<span class="loyalty-badge" style="background:linear-gradient(45deg,#757575,#616161)">${sale.mode}</span>` : '';
+      const upgradeTag = sale.upgrades ? `<span class="loyalty-badge" style="background:linear-gradient(45deg,#9c27b0,#6a1b9a)">Upgrades</span>` : '';
+
+      let extraHuur = '';
+      if (sale.mode === 'huren' && (sale.locationType === 'meth-loods' || sale.locationType === 'coke-loods') && sale.rentalEnd) {
+        const end = new Date(sale.rentalEnd);
+        extraHuur = `
+      <div class="detail-item">
+        <div class="detail-label">Huur t/m</div>
+        <div class="detail-value">${end.toLocaleDateString('nl-NL')}</div>
+      </div>
+    `;
+      }
+
+      let buttonHTML = '';
+      if (showInRecentTab) {
+        buttonHTML = `
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-danger" onclick="removeFromRecent(${sale.id})">Uit Recente Verwijderen</button>
+        <button class="btn btn-danger" onclick="removeSale(${sale.id})" style="background: linear-gradient(45deg, #8B0000, #4B0000);">Volledig Verwijderen</button>
+      </div>
+    `;
+      } else {
+        buttonHTML = `<button class="btn btn-danger" onclick="removeSale(${sale.id})">Verwijder Verkoop</button>`;
+      }
+
+      return `
+    <div class="sale-card ${isRecent ? 'recent' : ''}">
+      <div class="sale-header">
+        <div class="client-name">
+          ${sale.clientName}
+          ${modeTag}
+          ${upgradeTag}
+        </div>
+        <div class="timestamp">${sale.timestamp}</div>
+      </div>
+      <div class="sale-details">
+        <div class="detail-item">
+          <div class="detail-label">Locatie</div>
+          <div class="detail-value location-type">${sale.locationName}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Type</div>
+          <div class="detail-value">${sale.locationType}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Basis Prijs</div>
+          <div class="detail-value price">${formatMoney(sale.basePrice)}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Verkoopprijs</div>
+          <div class="detail-value total">${formatMoney(sale.finalPrice)}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Inkoopkosten</div>
+          <div class="detail-value" style="color: #f44336;">${formatMoney(sale.costs)}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Netto Winst</div>
+          <div class="detail-value" style="color: #4CAF50;">${formatMoney(sale.profit)}</div>
+        </div>
+        ${extraHuur}
+      </div>
+      ${buttonHTML}
+    </div>
+  `;
+    }
+
+    function updateStats() {
+      const uniqueClients = [...new Set(sales.map(s => s.clientName.toLowerCase()))].length;
+      const totalSales = sales.length;
+      const totalRevenue = sales.reduce((sum, sale) => sum + sale.finalPrice, 0);
+      const totalCosts = sales.reduce((sum, sale) => sum + (sale.costs || 0), 0);
+      const totalProfit = totalRevenue - totalCosts;
+
+      document.getElementById('totalClients').textContent = uniqueClients;
+      document.getElementById('totalSales').textContent = totalSales;
+      document.getElementById('totalRevenue').textContent = formatMoney(totalRevenue);
+      document.getElementById('totalProfit').textContent = formatMoney(totalProfit);
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+
+      const btns = Array.from(document.querySelectorAll('.tab-btn'));
+      btns.forEach(b => b.classList.remove('active'));
+      if (tab === 'recent' && btns[0]) btns[0].classList.add('active');
+      if (tab === 'history' && btns[1]) btns[1].classList.add('active');
+
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      const el = document.getElementById(tab + '-tab');
+      if (el) el.classList.add('active');
+
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const recentContainer = document.getElementById('recentSalesList');
+      const historyContainer = document.getElementById('historySalesList');
+
+      if (recentSales.length === 0) {
+        recentContainer.innerHTML = `<div class="empty-state">Geen recente verkopen. Voeg je eerste verkoop toe.</div>`;
+      } else {
+        recentContainer.innerHTML = recentSales.map((sale, index) =>
+          createSaleCard(sale, index < 3, true)
+        ).join('');
+      }
+
+      if (sales.length === 0) {
+        historyContainer.innerHTML = `<div class="empty-state">Geen verkoop historie.</div>`;
+      } else {
+        historyContainer.innerHTML = sales.map(sale =>
+          createSaleCard(sale, false, false)
+        ).join('');
+      }
+
+      updateStats();
+    }
+
+    /* ======= EVENTS / INIT ======= */
+    document.getElementById('addBtn').onclick = checkoutCart;
+    document.getElementById('clientName').addEventListener('input', renderCart);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        const focused = document.activeElement;
+        if (focused && focused.id === 'clientName') {
+          checkoutCart();
+        }
+      }
+    });
+
+    // Start
+    loadData();
+    updateDisplay();
+    initItemOverlays();
+    renderCart();
+  </script>
