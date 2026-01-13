@@ -72,7 +72,8 @@
    3) HTML EN BODY
    ========================================== */
 html {
-    scroll-padding-top: 80px; /* Compenseert voor fixed header */
+    scroll-padding-top: 80px;
+    /* Compenseert voor fixed header */
     font-size: 60%;
     overflow-x: hidden;
 }
@@ -328,6 +329,7 @@ span {
 }
 
 @keyframes words {
+
     0%,
     20% {
         content: "Web Designer.";
@@ -355,6 +357,7 @@ span {
 }
 
 @keyframes typing {
+
     /* Word 1: Web Designer */
     0%,
     2% {
@@ -470,9 +473,12 @@ span {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;                /* AANPASBAAR: breedte van het lijntje */
-    height: 4px;                 /* AANPASBAAR: dikte van het lijntje */
-    background: linear-gradient(90deg, transparent, #D9B99B, #EED9C4, #D9B99B, transparent);  /* AANPASBAAR: kleuren */
+    width: 120px;
+    /* AANPASBAAR: breedte van het lijntje */
+    height: 4px;
+    /* AANPASBAAR: dikte van het lijntje */
+    background: linear-gradient(90deg, transparent, #D9B99B, #EED9C4, #D9B99B, transparent);
+    /* AANPASBAAR: kleuren */
     border-radius: 2px;
 }
 
@@ -731,6 +737,7 @@ span {
    ========================================== */
 .portfolio {
     background: var(--bg-color);
+    padding-bottom: 8rem;
 }
 
 .portfolio h2 {
@@ -750,57 +757,75 @@ span {
 .portfolio-box {
     position: relative;
     border-radius: 3rem;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     transition: 0.4s ease-in-out;
+}
+
+.portfolio-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg,
+            hsla(0, 0%, 0%, 0) 60%,
+            rgba(217, 185, 155, 0.5) 70%,
+            hsla(0, 0%, 0%, 0),
+            hsla(0, 0%, 0%, 0) 100%);
+    transition: 1300ms ease;
+    background-size: 200% 200%, 100% 100%;
+    background-repeat: no-repeat;
+    background-position: -100% -100%, 0 0;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .portfolio-box:hover {
     box-shadow: 0 0 50px var(--main-color);
 }
 
-.portfolio-box img {
-    width: 100%;
-    transition: 0.5s ease;
+.portfolio-box:hover::before {
+    background-position: 100% 100%, 0 0;
 }
 
+.portfolio-box img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease;
+}
 .portfolio-box:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .portfolio-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
     background: linear-gradient(rgba(0, 0, 0, 0.1), var(--main-color));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     text-align: center;
-    padding: 0 4rem;
-    transform: translateY(100%);
-    transition: 0.5s ease;
+
+    max-height: 0;
+    padding: 0 4rem;          /* geen verticale padding in gesloten staat */
+    overflow: hidden;
+
+    transition: max-height 0.45s ease, padding 0.45s ease;
 }
 
 .portfolio-box:hover .portfolio-info {
-    transform: translateY(0);
+    max-height: 260px;        /* pas aan aan je tekst */
+    padding: 2.5rem 4rem;     /* verticale padding pas bij open */
 }
 
 .portfolio-info h4 {
     font-size: 3rem;
     font-weight: 800;
     line-height: 1.5;
-    color: black;
+    color: white;
 }
 
 .portfolio-info p {
     font-size: 1.6rem;
     margin: 0.3rem 0 1rem;
-    color: black;
+    color: white;
 }
 
 .portfolio-info a {
@@ -811,6 +836,7 @@ span {
     height: 5rem;
     background: white;
     border-radius: 50%;
+    text-decoration: none;
 }
 
 .portfolio-info a i {
@@ -875,6 +901,7 @@ span {
 }
 
 @keyframes pulse {
+
     0%,
     100% {
         transform: scaleY(1);
