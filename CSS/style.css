@@ -1,5 +1,28 @@
-   /* Kleurenpallet: #FAF0E6 #FFF0DB #EED9C4 #D9B99B #252525 #80674C */
+/* ==========================================
+   INHOUD
+   ==========================================
+   1) RESET EN BASIS
+   2) CSS VARIABELEN EN THEMA
+   3) HTML EN BODY
+   4) HEADER EN NAVIGATIE
+   5) SECTIONS ALGEMEEN
+   6) HOME
+   7) TYPO EN ANIMATIES
+   8) EDUCATION SECTION - TIMELINE
+   9) SCROLLBAR
+   10) ABOUT SECTION
+   11) PORTFOLIO SECTION
+   12) SKILLS SECTION
+   13) CONTACT SECTION
+   14) FOOTER
+   15) RESPONSIVE
+   ========================================== */
 
+/* Kleurenpallet: #FAF0E6 #FFF0DB #EED9C4 #D9B99B #252525 #80674C */
+
+/* ==========================================
+   1) RESET EN BASIS
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -11,20 +34,30 @@
     font-family: "Poppins", sans-serif;
 }
 
+* {
+    scroll-behavior: smooth;
+}
+
+/* ==========================================
+   2) CSS VARIABELEN EN THEMA
+   ========================================== */
 :root {
     --bg-color: #080808;
     --second-bg-color: #131313;
     --text-color: white;
     --main-color: #D9B99B;
+
     --color-light: #FAF0E6;
     --color-light-beige: #FFF0DB;
     --color-beige: #EED9C4;
     --color-tan: #D9B99B;
     --color-dark-beige: #80674C;
     --color-dark: #252525;
+
     --color-primary: #D9B99B;
     --color-secondary: #80674C;
     --color-medium: rgba(217, 185, 155, 0.3);
+
     --transition: all 0.3s ease;
 }
 
@@ -35,16 +68,11 @@
     --main-color: #D9B99B;
 }
 
+/* ==========================================
+   3) HTML EN BODY
+   ========================================== */
 html {
-    scroll-padding-top: 80px;
-    /* Compenseert voor fixed header */
-}
-
-* {
-    scroll-behavior: smooth;
-}
-
-html {
+    scroll-padding-top: 80px; /* Compenseert voor fixed header */
     font-size: 60%;
     overflow-x: hidden;
 }
@@ -54,6 +82,9 @@ body {
     color: var(--text-color);
 }
 
+/* ==========================================
+   4) HEADER EN NAVIGATIE
+   ========================================== */
 .header {
     position: fixed;
     top: 0;
@@ -96,7 +127,7 @@ body {
     font-size: 1.6rem;
     color: #6B5444;
     margin-left: 3rem;
-    font-weight: 500;
+    font-weight: 700;
     transition: all 0.3s ease;
     padding: 1rem 2.5rem;
     border-radius: 3rem;
@@ -122,11 +153,17 @@ body {
     display: none;
 }
 
+/* ==========================================
+   5) SECTIONS ALGEMEEN
+   ========================================== */
 section {
-    min-height: 100vh;
+    min-height: auto;
     padding: 10rem 12% 10rem;
 }
 
+/* ==========================================
+   6) HOME
+   ========================================== */
 .home {
     display: flex;
     align-items: center;
@@ -148,8 +185,8 @@ span {
 }
 
 .home-content h3 {
-    margin-bottom: 2rem;
     margin-top: 1rem;
+    margin-bottom: 2rem;
     font-size: 2.5rem;
 }
 
@@ -170,7 +207,6 @@ span {
     top: 3rem;
     width: 22vw;
     border-radius: 10%;
-    box-shadow: 0 0 25px var(--main-color);
     cursor: pointer;
     transition: all 0.6s ease-in-out;
     transform-style: preserve-3d;
@@ -178,7 +214,8 @@ span {
 
 .home-img img:hover {
     transform: translateZ(50px) rotateY(10deg) rotateX(-5deg) scale(1.1);
-    box-shadow: 0 0 40px var(--main-color),
+    box-shadow:
+        0 0 40px var(--main-color),
         0 0 80px var(--main-color),
         0 20px 60px rgba(0, 0, 0, 0.5);
     filter: brightness(1) contrast(1);
@@ -239,7 +276,6 @@ span {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-
 }
 
 .btn-group a:nth-of-type(2) {
@@ -255,6 +291,9 @@ span {
     color: black;
 }
 
+/* ==========================================
+   7) TYPO EN ANIMATIES
+   ========================================== */
 .text-animation {
     font-size: 34px;
     font-weight: 600;
@@ -268,7 +307,7 @@ span {
 .text-animation span::before {
     content: "Web Developer";
     color: var(---main-color);
-    animation: words 20s infinite;
+    animation: words 36s infinite;
 }
 
 .text-animation span::after {
@@ -279,7 +318,7 @@ span {
     height: 100%;
     border-left: 3px solid var(--second-bg-color);
     right: -8px;
-    animation: cursor 0.6s infinite, typing 20s steps(14) infinite;
+    animation: cursor 0.6s infinite, typing 36s infinite;
 }
 
 @keyframes cursor {
@@ -289,101 +328,129 @@ span {
 }
 
 @keyframes words {
-
     0%,
-    16% {
+    20% {
         content: "Web Designer.";
     }
 
-    17%,
-    33% {
+    22%,
+    40% {
         content: "Graphic Designer.";
     }
 
-    34%,
-    49% {
+    42%,
+    60% {
         content: "Motorliefhebber.";
     }
 
-    50%,
-    66% {
+    62%,
+    80% {
         content: "Autoliefhebber.";
     }
 
-    67%,
-    83% {
-        content: "Vriendelijke jongen.";
-    }
-
-    84%,
+    82%,
     100% {
-        content: "Behulpzame jongen.";
+        content: "Fitnesser.";
     }
 }
 
 @keyframes typing {
-    /* Web Designer */
-    0%, 2% {
+    /* Word 1: Web Designer */
+    0%,
+    2% {
         width: 0;
     }
-    5%, 14% {
+
+    5%,
+    12% {
         width: calc(100% + 8px);
     }
-    16% {
+
+    17%,
+    20% {
         width: 0;
     }
-    
-    /* Graphic Designer */
-    17%, 19% {
+
+    20%,
+    22% {
         width: 0;
     }
-    22%, 31% {
+
+    /* Word 2: Graphic Designer */
+    22%,
+    24.5% {
+        width: 0;
+    }
+
+    27%,
+    34% {
         width: calc(100% + 8px);
     }
-    33% {
+
+    37.5%,
+    40% {
         width: 0;
     }
-    
-    /* Motorliefhebber */
-    34%, 36% {
+
+    40%,
+    42% {
         width: 0;
     }
-    39%, 47% {
+
+    /* Word 3: Motorliefhebber */
+    42%,
+    44.5% {
+        width: 0;
+    }
+
+    47%,
+    54% {
         width: calc(100% + 8px);
     }
-    49% {
+
+    57.5%,
+    60% {
         width: 0;
     }
-    
-    /* Autoliefhebber */
-    50%, 52% {
+
+    60%,
+    62% {
         width: 0;
     }
-    55%, 64% {
+
+    /* Word 4: Autoliefhebber */
+    62%,
+    64.5% {
+        width: 0;
+    }
+
+    67%,
+    74% {
         width: calc(100% + 8px);
     }
-    66% {
+
+    77.5%,
+    80% {
         width: 0;
     }
-    
-    /* Vriendelijke jongen */
-    67%, 69% {
+
+    80%,
+    82% {
         width: 0;
     }
-    72%, 81% {
+
+    /* Word 5: Fitnesser */
+    82%,
+    84.5% {
+        width: 0;
+    }
+
+    87%,
+    95% {
         width: calc(100% + 8px);
     }
-    83% {
-        width: 0;
-    }
-    
-    /* Behulpzame jongen */
-    84%, 86% {
-        width: 0;
-    }
-    89%, 98% {
-        width: calc(100% + 8px);
-    }
+
+    98%,
     100% {
         width: 0;
     }
@@ -393,8 +460,25 @@ span {
     font-size: 8rem;
     text-align: center;
     margin: 5rem 0;
+    position: relative;
+    padding-bottom: 2rem;
 }
 
+.heading::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;                /* AANPASBAAR: breedte van het lijntje */
+    height: 4px;                 /* AANPASBAAR: dikte van het lijntje */
+    background: linear-gradient(90deg, transparent, #D9B99B, #EED9C4, #D9B99B, transparent);  /* AANPASBAAR: kleuren */
+    border-radius: 2px;
+}
+
+/* ==========================================
+   8) EDUCATION SECTION - TIMELINE
+   ========================================== */
 .education {
     padding: 10rem 12%;
     background: var(--bg-color);
@@ -444,7 +528,8 @@ span {
     height: 21px;
     width: 21px;
     background-color: var(--main-color);
-    box-shadow: 0 0 25px var(--main-color),
+    box-shadow:
+        0 0 25px var(--main-color),
         0 0 50px var(--main-color);
     position: absolute;
     left: calc(50% - 8px);
@@ -488,6 +573,9 @@ span {
     line-height: 22px;
 }
 
+/* ==========================================
+   9) SCROLLBAR
+   ========================================== */
 ::-webkit-scrollbar {
     width: 15px;
 }
@@ -503,7 +591,7 @@ span {
 }
 
 /* ==========================================
-   ABOUT SECTION
+   10) ABOUT SECTION
    ========================================== */
 .section-padding {
     padding: 10rem 12%;
@@ -520,7 +608,7 @@ span {
 }
 
 .section-title::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -538,16 +626,11 @@ span {
     color: var(--main-color);
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .about {
     background-color: #252525;
     backdrop-filter: blur(10px);
     width: 100%;
-    padding: 14rem 12% 4rem 12%;
+    padding: 10rem 12%;
 }
 
 .about-content {
@@ -643,6 +726,9 @@ span {
     margin: 0;
 }
 
+/* ==========================================
+   11) PORTFOLIO SECTION
+   ========================================== */
 .portfolio {
     background: var(--bg-color);
 }
@@ -732,28 +818,11 @@ span {
     color: var(--main-color);
 }
 
-
-
-
-
+/* ==========================================
+   12) SKILLS SECTION
+   ========================================== */
 .skills {
-    padding: 4rem 12% 100px 12%;
-}
-
-.skills h2 {
-    margin-bottom: 2rem;
-    font-size: 5.5rem;
-    text-align: center;
-}
-
-.skill-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 40px;
-    flex-wrap: wrap;
-    --tech-offset: 30px;        /* Negatief = omhoog, Positief = omlaag */
-    --kenmerken-offset: -40px; /* Start met -15px voor de donuts */
+    padding: 10rem 12%;
 }
 
 .heading2 {
@@ -762,15 +831,22 @@ span {
     margin-bottom: 50px;
 }
 
+.skill-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
 .tech {
     font-size: 2.8rem;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    flex: 1;
-    min-width: 300px;
-    align-self: flex-start;
-    margin-top: var(--tech-offset, 0px);
+    gap: 30px;
+    min-width: 350px;
+    align-items: stretch;
 }
 
 .tech .bar {
@@ -778,10 +854,16 @@ span {
     display: flex;
     align-items: center;
     gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .tech .bar i {
     transition: filter 0.3s ease;
+    min-width: 120px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .tech .bar i:hover {
@@ -793,8 +875,14 @@ span {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(1.2); }
+    0%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(1.2);
+    }
 }
 
 .tech .bar:first-child {
@@ -804,7 +892,6 @@ span {
 .tech .bar:last-child {
     margin-bottom: 0;
 }
-
 
 .tech .bar .span2 {
     font-size: 15px;
@@ -816,9 +903,10 @@ span {
 .tech .bar .progress-line {
     position: relative;
     border-radius: 10px;
-    flex: 1;
-    min-width: 200px;
-    height: 5px;
+    width: 85%;
+    min-width: 260px;
+    max-width: 500px;
+    height: 7px;
     background-color: var(--bg-color);
     transform: scaleX(0);
     transform-origin: left;
@@ -853,19 +941,17 @@ span {
     width: 90%;
 }
 
-.progress-line.css span2 {
-    width: 80%;
-}
-
 .progress-line.python span2 {
     width: 85%;
+}
+
+.progress-line.css span2 {
+    width: 80%;
 }
 
 .progress-line.javascript span2 {
     width: 40%;
 }
-
-
 
 .progress-line span2::after {
     position: absolute;
@@ -927,10 +1013,9 @@ span {
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: flex-start;
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 300px;
     align-self: flex-start;
-    margin-top: var(--kenmerken-offset, 0px);
 }
 
 .kenmerken-bars .kenmerken-bar {
@@ -1023,12 +1108,12 @@ span {
     opacity: 1;
 }
 
-.skills {
-    padding-bottom: 7rem;
-}
-
+/* ==========================================
+   13) CONTACT SECTION
+   ========================================== */
 .contact {
     background-color: var(--bg-color);
+    padding: 10rem 12%;
 }
 
 .contact h2 {
@@ -1068,6 +1153,9 @@ span {
     margin-top: 2rem;
 }
 
+/* ==========================================
+   14) FOOTER
+   ========================================== */
 .footer {
     position: relative;
     bottom: 0;
@@ -1112,6 +1200,11 @@ span {
     text-align: center;
 }
 
+.footer ul li {
+    display: inline-block;
+    padding: 0 15px;
+}
+
 .footer ul li a {
     color: white;
     border-bottom: 3px solid transparent;
@@ -1120,12 +1213,6 @@ span {
 
 .footer ul li a:hover {
     border-bottom: 3px solid var(--main-color);
-
-}
-
-.footer ul li {
-    display: inline-block;
-    padding: 0 15px;
 }
 
 .footer .copyright {
@@ -1135,10 +1222,10 @@ span {
     color: white;
 }
 
-
-
-
-@media(max-width:1285px) {
+/* ==========================================
+   15) RESPONSIVE
+   ========================================== */
+@media (max-width: 1285px) {
     html {
         font-size: 55%;
     }
@@ -1150,7 +1237,7 @@ span {
     }
 }
 
-@media(max-width:991px) {
+@media (max-width: 991px) {
     header {
         padding: 2rem 3%;
     }
@@ -1177,7 +1264,6 @@ span {
         left: 0;
     }
 
-
     .kenmerken .wrapper {
         grid-template-columns: (1, 1fr);
     }
@@ -1192,13 +1278,11 @@ span {
 
     .portfolio-container {
         grid-template-columns: repeat(2, 1fr);
-        /* 2 kolommen op tablets */
         grid-template-rows: auto;
-        /* Auto rows op tablets */
     }
 }
 
-@media(max-width:895px) {
+@media (max-width: 895px) {
     #menu-icon {
         display: block;
     }
@@ -1252,7 +1336,7 @@ span {
     }
 
     .services h2 {
-        margin-bottom: 3rem
+        margin-bottom: 3rem;
     }
 
     .services-container {
@@ -1261,9 +1345,7 @@ span {
 
     .portfolio-container {
         grid-template-columns: 1fr;
-        /* 1 kolom op mobiel */
         grid-template-rows: auto;
-        /* Auto rows op mobiel */
     }
 
     /* Skills sectie responsive */

@@ -163,6 +163,13 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observeer alle secties voor animaties
 sections.forEach(section => {
+    // Skip contact sectie - geen fade-in animatie
+    if (section.id === 'contact') {
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+        return;
+    }
+    
     // Initiële stijlen voor fade-in effect
     section.style.opacity = '0';
     section.style.transform = 'translateY(30px)';
