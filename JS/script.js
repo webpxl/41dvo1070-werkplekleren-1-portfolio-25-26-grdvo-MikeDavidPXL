@@ -197,3 +197,63 @@ if (skillsSection) {
     skillsObserver.observe(skillsSection);
 }
 
+
+// ========== TYPEWRITER (woorden typen, wissen, dan pas wisselen) ==========
+(function () {
+    const target = document.querySelector('.text-animation .typed');
+    if (!target) return;
+
+    const words = [
+        'Web Designer.',
+        'Graphic Designer.',
+        'Motorliefhebber.',
+        'Autoliefhebber.',
+        'Fitnesser.'
+    ];
+
+    const typeSpeed = 70;      // ms per letter
+    const deleteSpeed = 45;    // ms per letter
+    const holdAfterType = 900; // pauze na volledig woord
+    const holdAfterDelete = 250; // pauze als woord leeg is
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    function tick() {
+        const word = words[wordIndex];
+
+        if (!deleting) {
+            // typen
+            charIndex++;
+            target.textContent = word.slice(0, charIndex);
+
+            if (charIndex === word.length) {
+                // volledig woord, even wachten, dan wissen
+                deleting = true;
+                return setTimeout(tick, holdAfterType);
+            }
+
+            return setTimeout(tick, typeSpeed);
+        } else {
+            // wissen
+            charIndex--;
+            target.textContent = word.slice(0, Math.max(0, charIndex));
+
+            if (charIndex <= 0) {
+                // leeg, NU pas wisselen, onzichtbaar
+                deleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                return setTimeout(tick, holdAfterDelete);
+            }
+
+            return setTimeout(tick, deleteSpeed);
+        }
+    }
+
+    // start leeg
+    target.textContent = '';
+    tick();
+})();
+
+

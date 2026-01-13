@@ -292,38 +292,36 @@ span {
 /* ==========================================
    7) TYPO EN ANIMATIES
    ========================================== */
-.text-animation {
-    font-size: 34px;
-    font-weight: 600;
-    min-width: 280px;
+.text-animation { white-space: nowrap; }
+
+.text-animation .typed-wrap{
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
 }
 
-.text-animation span {
-    position: relative;
+.text-animation .typed{
+  display: inline-block;
 }
 
-.text-animation span::before {
-    content: "Web Developer";
-    color: var(---main-color);
-    animation: words 36s infinite;
+.text-animation .typed-wrap::after{
+  content: "";
+  position: absolute;
+  left: 100%;
+  margin-left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 1em;
+  background: var(--main-color);
+  animation: blink 1s infinite;
 }
 
-.text-animation span::after {
-    content: "";
-    background-color: var(--second-bg-color);
-    position: absolute;
-    width: calc(100% +8px);
-    height: 100%;
-    border-left: 3px solid var(--second-bg-color);
-    right: -8px;
-    animation: cursor 0.6s infinite, typing 36s infinite;
+@keyframes blink{
+  0%,59%{opacity:1;}
+  60%,100%{opacity:0;}
 }
 
-@keyframes cursor {
-    to {
-        border-left: 2px solid var(--main-color);
-    }
-}
 
 @keyframes words {
 
