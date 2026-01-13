@@ -199,27 +199,24 @@ span {
 }
 
 .home-img {
-    border-radius: 50%;
+    border-radius: 0;
     perspective: 1000px;
 }
 
+/* shadow rond de persoon, niet rond de container */
 .home-img img {
-    position: relative;
-    top: 3rem;
     width: 22vw;
-    border-radius: 10%;
-    cursor: pointer;
-    transition: all 0.6s ease-in-out;
+    border-radius: 0;
+    display: block;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.45));
+    transition: transform 0.6s ease-in-out, filter 0.6s ease-in-out;
     transform-style: preserve-3d;
 }
 
 .home-img img:hover {
-    transform: translateZ(50px) rotateY(10deg) rotateX(-5deg) scale(1.1);
-    box-shadow:
-        0 0 40px var(--main-color),
-        0 0 80px var(--main-color),
-        0 20px 60px rgba(0, 0, 0, 0.5);
-    filter: brightness(1) contrast(1);
+    transform: translateZ(10px) rotateY(10deg) rotateX(-5deg) scale(1.1);
+    filter:
+        drop-shadow(0 0 35px rgba(217,185,155,0.55));
 }
 
 .home-content p {
@@ -473,7 +470,7 @@ span {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
+    width: 150px;
     /* AANPASBAAR: breedte van het lijntje */
     height: 4px;
     /* AANPASBAAR: dikte van het lijntje */
@@ -482,12 +479,16 @@ span {
     border-radius: 2px;
 }
 
+h1.heading::after {
+    display: none;
+}
+
 /* ==========================================
    8) EDUCATION SECTION - TIMELINE
    ========================================== */
 .education {
     padding: 10rem 12%;
-    background: var(--bg-color);
+    background: var(--color-dark);
 }
 
 .education h2 {
@@ -633,7 +634,7 @@ span {
 }
 
 .about {
-    background-color: #252525;
+    background-color: var(--second-bg-color);
     backdrop-filter: blur(10px);
     width: 100%;
     padding: 10rem 12%;
@@ -659,7 +660,7 @@ span {
 }
 
 .about-text p {
-    font-size: 1.6rem;
+    font-size: 2rem;
     line-height: 1.8;
     margin-bottom: 1.5rem;
     color: var(--text-color);
@@ -728,7 +729,7 @@ span {
 .stat-text {
     color: var(--color-dark);
     font-weight: 500;
-    font-size: 1.6rem;
+    font-size: 2rem;
     margin: 0;
 }
 
@@ -736,7 +737,7 @@ span {
    11) PORTFOLIO SECTION
    ========================================== */
 .portfolio {
-    background: var(--bg-color);
+    background: var(--color-dark);
     padding-bottom: 8rem;
 }
 
@@ -1139,46 +1140,132 @@ span {
    13) CONTACT SECTION
    ========================================== */
 .contact {
-    background-color: var(--bg-color);
+    background-color: var(--color-dark);
     padding: 10rem 12%;
 }
 
 .contact h2 {
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     color: white;
 }
 
-.contact form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
-    margin: 5rem auto;
+.contact .contact-subtitle {
     text-align: center;
+    color: rgba(255,255,255,0.75);
+    font-size: 1.7rem;
+    margin-bottom: 5rem;
 }
 
-.contact form .input-box {
+.contact .contact-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.contact .contact-card {
+    background: rgba(8, 8, 8, 0.45);
+    border: 2px solid rgba(217, 185, 155, 0.35);
+    border-radius: 2.5rem;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+}
+
+.contact .contact-card h3 {
+    font-size: 2.6rem;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.contact .contact-list {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.contact form .input-box input,
-.contact form textarea {
-    width: 100%;
-    padding: 2.5rem;
-    font-size: 1.8rem;
-    color: var(--text-color);
-    background: var(--bg-color);
-    border-radius: 2rem;
-    border: 2px solid var(--main-color);
-    margin: 1.5rem 0;
-    resize: none;
-}
-
-.contact form .btn {
+    flex-direction: column;
+    gap: 1.6rem;
     margin-top: 2rem;
 }
+
+.contact .contact-item {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 1.2rem;
+    align-items: center;
+    font-size: 1.6rem;
+    color: rgba(255,255,255,0.85);
+}
+
+.contact .contact-item i {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(217,185,155,0.18);
+    color: var(--main-color);
+    font-size: 2rem;
+}
+
+.contact form {
+    margin: 0;
+    display: block;
+}
+
+.contact .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+}
+
+.contact input,
+.contact textarea {
+    width: 100%;
+    padding: 1.8rem 2rem;
+    font-size: 1.7rem;
+    color: var(--text-color);
+    background: rgba(8, 8, 8, 0.7);
+    border-radius: 1.8rem;
+    border: 2px solid rgba(217, 185, 155, 0.4);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.contact input:focus,
+.contact textarea:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 6px rgba(217,185,155,0.12);
+}
+
+.contact .form-full {
+    grid-column: 1 / -1;
+}
+
+.contact .form-actions {
+    margin-top: 1.8rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .contact .contact-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .contact .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact .form-actions {
+        justify-content: center;
+    }
+}
+
 
 /* ==========================================
    14) FOOTER
@@ -1209,6 +1296,7 @@ span {
     border-radius: 50%;
     margin: 0 10px;
     transition: 0.3s ease-in-out;
+
 }
 
 .footer .social a:hover {
@@ -1216,6 +1304,7 @@ span {
     background-color: var(--main-color);
     color: black;
     box-shadow: 0 0 25px var(--main-color);
+    
 }
 
 .footer ul {
@@ -1236,6 +1325,7 @@ span {
     color: white;
     border-bottom: 3px solid transparent;
     transition: 0.3s ease-in-out;
+    text-decoration: none;
 }
 
 .footer ul li a:hover {
@@ -1243,7 +1333,7 @@ span {
 }
 
 .footer .copyright {
-    margin-top: 50px;
+    margin-top: 25px;
     text-align: center;
     font-size: 16px;
     color: white;
