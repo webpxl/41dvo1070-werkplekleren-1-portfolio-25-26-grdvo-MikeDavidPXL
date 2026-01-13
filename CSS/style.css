@@ -1,6 +1,5 @@
    /* Kleurenpallet: #FAF0E6 #FFF0DB #EED9C4 #D9B99B #252525 #80674C */
 
-
 * {
     margin: 0;
     padding: 0;
@@ -23,6 +22,10 @@
     --color-tan: #D9B99B;
     --color-dark-beige: #80674C;
     --color-dark: #252525;
+    --color-primary: #D9B99B;
+    --color-secondary: #80674C;
+    --color-medium: rgba(217, 185, 155, 0.3);
+    --transition: all 0.3s ease;
 }
 
 .light {
@@ -56,73 +59,61 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 2rem 12% 2rem;
-    background: var(--color-tan);
+    padding: 1rem 12% 1rem;
+    background: var(--color-light);
     backdrop-filter: blur(10px);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     z-index: 5;
 }
 
 .logo {
     font-size: 3rem;
-    color: var(--text-color);
-    font-weight: 800;
+    color: #6B5444;
+    font-weight: 700;
     cursor: pointer;
     transition: 0.3s ease;
+    text-decoration: none !important;
 }
 
 .logo:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    text-decoration: none !important;
 }
 
 .logo span {
-    text-shadow: 0 0 25px var(--color-tan);
+    color: #6B5444;
+}
+
+.navbar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navbar a {
-    font-size: 1.8rem;
-    color: var(--text-color);
-    margin-left: 4rem;
+    font-size: 1.6rem;
+    color: #6B5444;
+    margin-left: 3rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    border-bottom: 3px solid transparent;
-    position: relative;
-    padding: 0.5rem 0;
+    padding: 1rem 2.5rem;
+    border-radius: 3rem;
+    text-decoration: none !important;
+    border: none !important;
 }
 
-.navbar a:hover,
-.navbar a:focus {
-    color: var(--main-color);
-    border-bottom: 3px solid var(--main-color);
+.navbar a:hover {
+    background: rgba(128, 103, 76, 0.15);
+    color: var(--color-dark-beige);
+    text-decoration: none !important;
 }
 
 .navbar a.active {
-    color: var(--main-color) !important;
-    border-bottom: 3px solid var(--main-color) !important;
-    text-shadow: 0 0 10px var(--main-color);
-    transform: translateY(-2px);
-}
-
-.navbar a::before {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: var(--main-color);
-    transition: width 0.3s ease;
-}
-
-.navbar a:hover::before {
-    width: 100%;
-}
-
-.navbar a.active::before {
-    width: 100%;
-    box-shadow: 0 0 8px var(--main-color);
+    background: var(--color-dark-beige);
+    color: white !important;
+    text-decoration: none !important;
 }
 
 #menu-icon {
@@ -156,10 +147,6 @@ span {
     color: var(--main-color);
 }
 
-.logo span {
-    color: var(--main-color);
-}
-
 .home-content h3 {
     margin-bottom: 2rem;
     margin-top: 1rem;
@@ -175,6 +162,7 @@ span {
 
 .home-img {
     border-radius: 50%;
+    perspective: 1000px;
 }
 
 .home-img img {
@@ -184,13 +172,16 @@ span {
     border-radius: 10%;
     box-shadow: 0 0 25px var(--main-color);
     cursor: pointer;
-    transition: 0.4s ease-in-out;
+    transition: all 0.6s ease-in-out;
+    transform-style: preserve-3d;
 }
 
 .home-img img:hover {
-    box-shadow: 0 0 25px var(--main-color),
-        0 0 50px var(--main-color),
-        0 0 100px var(--main-color);
+    transform: translateZ(50px) rotateY(10deg) rotateX(-5deg) scale(1.1);
+    box-shadow: 0 0 40px var(--main-color),
+        0 0 80px var(--main-color),
+        0 20px 60px rgba(0, 0, 0, 0.5);
+    filter: brightness(1) contrast(1);
 }
 
 .home-content p {
@@ -213,6 +204,7 @@ span {
     color: var(--main-color);
     margin: 3rem 1.5rem 3rem 0;
     transition: 0.3s ease-in-out;
+    text-decoration: none !important;
 }
 
 .social-icons a:hover {
@@ -220,6 +212,7 @@ span {
     transform: scale(1.3) translateY(-5px);
     box-shadow: 0 0 25px var(--main-color);
     background-color: var(--main-color);
+    text-decoration: none !important;
 }
 
 .btn {
@@ -250,7 +243,7 @@ span {
 }
 
 .btn-group a:nth-of-type(2) {
-    background-color: black;
+    background-color: var(--second-bg-color);
     color: var(--main-color);
     border: 2px solid var(--main-color);
     box-shadow: 0 0 25px transparent;
@@ -298,56 +291,101 @@ span {
 @keyframes words {
 
     0%,
-    20% {
+    16% {
         content: "Web Designer.";
     }
 
-    21%,
-    40% {
+    17%,
+    33% {
+        content: "Graphic Designer.";
+    }
+
+    34%,
+    49% {
         content: "Motorliefhebber.";
     }
 
-    41%,
-    60% {
+    50%,
+    66% {
         content: "Autoliefhebber.";
     }
 
-    61%,
-    80% {
+    67%,
+    83% {
         content: "Vriendelijke jongen.";
     }
 
-    81%,
+    84%,
     100% {
         content: "Behulpzame jongen.";
     }
 }
 
 @keyframes typing {
-
-    10%,
-    15%,
-    30%,
-    35%,
-    50%,
-    55%,
-    70%,
-    75%,
-    90%,
-    95% {
+    /* Web Designer */
+    0%, 2% {
         width: 0;
     }
-
-    5%,
-    20%,
-    25%,
-    40%,
-    45%,
-    60%,
-    65%,
-    80%,
-    85% {
+    5%, 14% {
         width: calc(100% + 8px);
+    }
+    16% {
+        width: 0;
+    }
+    
+    /* Graphic Designer */
+    17%, 19% {
+        width: 0;
+    }
+    22%, 31% {
+        width: calc(100% + 8px);
+    }
+    33% {
+        width: 0;
+    }
+    
+    /* Motorliefhebber */
+    34%, 36% {
+        width: 0;
+    }
+    39%, 47% {
+        width: calc(100% + 8px);
+    }
+    49% {
+        width: 0;
+    }
+    
+    /* Autoliefhebber */
+    50%, 52% {
+        width: 0;
+    }
+    55%, 64% {
+        width: calc(100% + 8px);
+    }
+    66% {
+        width: 0;
+    }
+    
+    /* Vriendelijke jongen */
+    67%, 69% {
+        width: 0;
+    }
+    72%, 81% {
+        width: calc(100% + 8px);
+    }
+    83% {
+        width: 0;
+    }
+    
+    /* Behulpzame jongen */
+    84%, 86% {
+        width: 0;
+    }
+    89%, 98% {
+        width: calc(100% + 8px);
+    }
+    100% {
+        width: 0;
     }
 }
 
@@ -358,7 +396,7 @@ span {
 }
 
 .education {
-    padding: 100px 15px;
+    padding: 10rem 12%;
     background: var(--bg-color);
 }
 
@@ -467,9 +505,49 @@ span {
 /* ==========================================
    ABOUT SECTION
    ========================================== */
+.section-padding {
+    padding: 10rem 12%;
+}
+
+.section-title {
+    font-size: 5.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--main-color);
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 5rem;
+    color: var(--main-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .about {
-    background-color: #252525 ;
+    background-color: #252525;
     backdrop-filter: blur(10px);
+    width: 100%;
+    padding: 14rem 12% 4rem 12%;
 }
 
 .about-content {
@@ -477,12 +555,25 @@ span {
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
     align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.about-text {
+    color: var(--text-color);
 }
 
 .about-text h3 {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
     margin-bottom: 1.5rem;
     color: var(--color-primary);
+}
+
+.about-text p {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
 }
 
 .personal-info {
@@ -495,25 +586,37 @@ span {
     gap: 2rem;
 }
 
+.info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .info-item {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-medium);
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--main-color);
+    font-size: 1.5rem;
+}
+
+.info-item strong {
+    color: var(--main-color);
+    margin-right: 0.5rem;
 }
 
 .info-item:last-child {
-    border-bottom: none;
+    border-bottom: 2px solid var(--main-color);
 }
 
 .about-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .stat-card {
-    background: rgba(255, 240, 219, 0.8);
-    padding: 2rem 1.5rem;
-    border-radius: 15px;
+    background: rgba(255, 240, 219, 0.9);
+    padding: 3.5rem 2.5rem;
+    border-radius: 20px;
     text-align: center;
     transition: var(--transition);
     border: 2px solid transparent;
@@ -522,27 +625,26 @@ span {
 
 .stat-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(128, 103, 76, 0.2);
+    box-shadow: 0 15px 35px rgba(128, 103, 76, 0.3);
     border-color: var(--color-secondary);
 }
 
 .stat-number {
-    font-size: 2.5rem;
+    font-size: 4rem;
     font-weight: 700;
     color: var(--color-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .stat-text {
     color: var(--color-dark);
     font-weight: 500;
+    font-size: 1.6rem;
     margin: 0;
 }
 
-
 .portfolio {
     background: var(--bg-color);
-    /* Gebruik de achtergrondkleur van de History sectie */
 }
 
 .portfolio h2 {
@@ -553,7 +655,6 @@ span {
 .portfolio-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* Standaard 3 kolommen */
     gap: 3.5rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -636,20 +737,13 @@ span {
 
 
 .skills {
-    padding: 100px 15px;
-
+    padding: 4rem 12% 100px 12%;
 }
 
 .skills h2 {
-    margin-bottom: 5rem;
-    text-align: left;
-    font-size: 8rem;
+    margin-bottom: 2rem;
+    font-size: 5.5rem;
     text-align: center;
-}
-
-.container {
-    padding: 75px 90px;
-    background-color: var(--second-bg-color);
 }
 
 .skill-container {
@@ -658,6 +752,8 @@ span {
     align-items: flex-start;
     gap: 40px;
     flex-wrap: wrap;
+    --tech-offset: 30px;        /* Negatief = omhoog, Positief = omlaag */
+    --kenmerken-offset: -40px; /* Start met -15px voor de donuts */
 }
 
 .heading2 {
@@ -670,9 +766,11 @@ span {
     font-size: 2.8rem;
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 20px;
     flex: 1;
     min-width: 300px;
+    align-self: flex-start;
+    margin-top: var(--tech-offset, 0px);
 }
 
 .tech .bar {
@@ -680,6 +778,23 @@ span {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.tech .bar i {
+    transition: filter 0.3s ease;
+}
+
+.tech .bar i:hover {
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.tech .bar:hover .progress-line {
+    animation: pulse 0.6s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.2); }
 }
 
 .tech .bar:first-child {
@@ -705,9 +820,13 @@ span {
     min-width: 200px;
     height: 5px;
     background-color: var(--bg-color);
-    animation: animate 1s cubic-bezier(1, 0, 0.5, 1) forwards;
     transform: scaleX(0);
     transform-origin: left;
+    transition: transform 1s cubic-bezier(1, 0, 0.5, 1);
+}
+
+.skills-animate .tech .bar .progress-line {
+    transform: scaleX(1);
 }
 
 @keyframes animate {
@@ -721,9 +840,13 @@ span {
     background-color: var(--main-color);
     position: absolute;
     border-radius: 10px;
-    animation: animate 1s 1s cubic-bezier(1, 0, 0.5, 1) forwards;
     transform: scaleX(0);
     transform-origin: left;
+    transition: transform 1s 0.3s cubic-bezier(1, 0, 0.5, 1);
+}
+
+.skills-animate .tech .bar .progress-line span2 {
+    transform: scaleX(1);
 }
 
 .progress-line.html span2 {
@@ -752,8 +875,12 @@ span {
     border-radius: 3px;
     top: -28px;
     right: -20px;
-    animation: showText 0.5s 1.5s linear forwards;
     opacity: 0;
+    transition: opacity 0.5s 1.2s linear;
+}
+
+.skills-animate .progress-line span2::after {
+    opacity: 1;
 }
 
 .progress-line.html span2::after {
@@ -802,6 +929,8 @@ span {
     align-items: flex-start;
     flex: 1;
     min-width: 300px;
+    align-self: flex-start;
+    margin-top: var(--kenmerken-offset, 0px);
 }
 
 .kenmerken-bars .kenmerken-bar {
@@ -843,46 +972,23 @@ span {
     stroke-dasharray: 502;
     stroke-dashoffset: 502;
     stroke-linecap: round;
+    transition: stroke-dashoffset 1s 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.path-1 {
-    animation: animate-path1 1s 1s linear forwards;
+.skills-animate .path-1 {
+    stroke-dashoffset: 45;
 }
 
-.path-2 {
-    animation: animate-path2 1s 1s linear forwards;
+.skills-animate .path-2 {
+    stroke-dashoffset: 22.5;
 }
 
-.path-3 {
-    animation: animate-path3 1s 1s linear forwards;
+.skills-animate .path-3 {
+    stroke-dashoffset: 135;
 }
 
-.path-4 {
-    animation: animate-path4 1s 1s linear forwards;
-}
-
-@keyframes animate-path1 {
-    100% {
-        stroke-dashoffset: 45;
-    }
-}
-
-@keyframes animate-path2 {
-    100% {
-        stroke-dashoffset: 22.5;
-    }
-}
-
-@keyframes animate-path3 {
-    100% {
-        stroke-dashoffset: 135;
-    }
-}
-
-@keyframes animate-path4 {
-    100% {
-        stroke-dashoffset: 90;
-    }
+.skills-animate .path-4 {
+    stroke-dashoffset: 90;
 }
 
 .kenmerken-bar .percentage {
@@ -892,8 +998,12 @@ span {
     transform: translate(-50%, -50%);
     font-size: 17px;
     font-weight: 500;
-    animation: showText 0.5 1s linear forwards;
     opacity: 0;
+    transition: opacity 0.5s 1s linear;
+}
+
+.skills-animate .kenmerken-bar .percentage {
+    opacity: 1;
 }
 
 .kenmerken-bar .text {
@@ -905,10 +1015,17 @@ span {
     transform: translateX(-50%);
     font-size: 17px;
     font-weight: 500;
-    animation: showText 0.5s 1s linear forwards;
     opacity: 0;
+    transition: opacity 0.5s 1s linear;
 }
 
+.skills-animate .kenmerken-bar .text {
+    opacity: 1;
+}
+
+.skills {
+    padding-bottom: 7rem;
+}
 
 .contact {
     background-color: var(--bg-color);
@@ -1060,9 +1177,6 @@ span {
         left: 0;
     }
 
-    .skills {
-        padding-bottom: 7rem;
-    }
 
     .kenmerken .wrapper {
         grid-template-columns: (1, 1fr);
@@ -1143,18 +1257,6 @@ span {
 
     .services-container {
         grid-template-columns: repeat(1, 1fr);
-    }
-
-    .navbar a {
-        display: block;
-        font-size: 2rem;
-        margin: 3rem 0;
-        color: white;
-    }
-
-    .home {
-        flex-direction: column-reverse;
-        margin: 5rem 4rem;
     }
 
     .portfolio-container {

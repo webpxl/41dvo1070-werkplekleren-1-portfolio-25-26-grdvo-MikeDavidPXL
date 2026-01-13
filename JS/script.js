@@ -177,3 +177,23 @@ if (homeSection) {
     homeSection.style.opacity = '1';
     homeSection.style.transform = 'translateY(0)';
 }
+
+// ========== SKILLS ANIMATIE - TRIGGER BIJ VIEWPORT ==========
+const skillsSection = document.querySelector('#skills');
+
+if (skillsSection) {
+    const skillsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('skills-animate');
+                skillsObserver.unobserve(entry.target); // Eenmalig
+            }
+        });
+    }, {
+        threshold: 0.3,
+        rootMargin: '0px'
+    });
+
+    skillsObserver.observe(skillsSection);
+}
+
