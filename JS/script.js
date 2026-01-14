@@ -127,13 +127,15 @@ function animateProgressBars() {
     progressBars.forEach(bar => {
         const parent = bar.parentElement;
         if (parent.classList.contains('html')) {
-            bar.style.width = '85%';
+            bar.style.width = '90%';
         } else if (parent.classList.contains('css')) {
-            bar.style.width = '75%';
+            bar.style.width = '80%';
         } else if (parent.classList.contains('javascript')) {
-            bar.style.width = '60%';
+            bar.style.width = '40%';
         } else if (parent.classList.contains('python')) {
-            bar.style.width = '70%';
+            bar.style.width = '85%';
+        } else if (parent.classList.contains('react')) {
+            bar.style.width = '65%';
         }
     });
 }
