@@ -32,6 +32,11 @@ function scrollSpy() {
 
     console.log('Final current section:', current);
 
+    // Update URL in browser (zonder pagina te herladen)
+    if (current && window.location.hash !== '#' + current) {
+        history.replaceState(null, null, '#' + current);
+    }
+
     // Update actieve link in navigatie
     navLinks.forEach(link => {
         link.classList.remove('active');
@@ -46,9 +51,16 @@ function scrollSpy() {
 // Smooth scroll bij klik op navigatie links
 navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        
+        // Alleen preventDefault als het een anchor link is op dezelfde pagina (begint met #)
+        if (!targetId.startsWith('#')) {
+            // Het is een link naar een andere pagina, laat de browser normaal navigeren
+            return;
+        }
+        
         e.preventDefault();
         
-        const targetId = this.getAttribute('href');
         const targetSection = document.querySelector(targetId);
         
         console.log('Clicked link:', targetId, 'Target section:', targetSection);
