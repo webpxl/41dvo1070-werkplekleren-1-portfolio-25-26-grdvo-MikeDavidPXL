@@ -106,6 +106,8 @@ body {
     cursor: pointer;
     transition: 0.3s ease;
     text-decoration: none !important;
+    max-width: 200px;
+    width: 100%;
 }
 
 .logo:hover {
@@ -118,9 +120,10 @@ body {
 }
 
 .navbar {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: center;
 }
 
 .navbar a {
@@ -133,6 +136,7 @@ body {
     border-radius: 3rem;
     text-decoration: none !important;
     border: none !important;
+    max-width: 125px;
 }
 
 .navbar a:hover {
@@ -1562,8 +1566,8 @@ img {
     }
 }
 
-/* === BREAKPOINT 768px === */
-@media (max-width: 768px) {
+/* === BREAKPOINT 800px === */
+@media (max-width: 800px) {
     html {
         font-size: 52%;
         scroll-padding-top: 60px;
@@ -1617,6 +1621,7 @@ img {
         padding: 0.6rem 0.7rem;
         color: white;
         white-space: nowrap;
+
     }
 
     .navbar a.active {
